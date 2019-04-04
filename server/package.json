@@ -1,0 +1,45 @@
+{
+  "name": "yalcs-server",
+  "version": "1.0.0",
+  "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
+  "main": "dist/app.js",
+  "scripts": {
+    "watch-coverage": "npm run coverage -- --watch",
+    "watch-start": "nodemon --watch dist -e js -L --inspect=0.0.0.0:9229 ./dist/app.js",
+    "watch-build": "npm run build -- -w",
+    "watch-test": "npm run test -- --watch",
+    "coverage": "npm run test -- --coverage",
+    "build": "tsc -p ./",
+    "start": "node dist/app",
+    "test": "jest"
+  },
+  "author": "Xyfir, LLC <contact@xyfir.com> (https://www.xyfir.com)",
+  "license": "MIT",
+  "prettier": {
+    "singleQuote": true
+  },
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "body-parser": "^1.18.3",
+    "dotenv": "^7.0.0",
+    "enve": "^1.0.1",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.0",
+    "@types/express": "^4.16.1",
+    "@types/jest": "^24.0.11",
+    "jest": "^24.5.0",
+    "jest-extended": "^0.11.1",
+    "nodemon": "^1.18.10",
+    "typescript": "^3.3.4000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xyfir/yalcs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Xyfir/yalcs/issues"
+  },
+  "homepage": "https://github.com/Xyfir/yalcs#readme"
+}

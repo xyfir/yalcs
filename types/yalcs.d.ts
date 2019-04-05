@@ -33,10 +33,8 @@ export namespace YALCS {
        */
       YALCS_WEB_URL: string;
       /**
-       * The id/name of your Slack channel.
+       * The id of your Slack channel.
        * @example "C2147483705"
-       * @example "#public-channel"
-       * @example "private-group"
        */
       SLACK_CHANNEL: string;
       /**

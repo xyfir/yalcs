@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { YALCS } from 'types/yalcs';
+import { api } from 'lib/api';
 import {
   createStyles,
   withStyles,
@@ -60,7 +61,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface ChatState extends YALCS.LocalStore {
+interface ChatState extends YALCS.Thread {
   show: boolean;
   text: string;
 }
@@ -73,11 +74,19 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   };
 
   componentDidMount() {
-    const data: YALCS.LocalStore =
+    const data: YALCS.Thread =
       localStorage.getItem('yalcs') !== undefined
         ? JSON.parse(localStorage.getItem('yalcs'))
         : {};
     this.setState(data);
+  }
+
+  componentDidUpdate() {
+    const data: YALCS.Thread = {
+      thread_ts: this.state.thread_ts,
+      messages: this.state.messages
+    };
+    localStorage.setItem('yalcs', JSON.stringify(data));
   }
 
   onClose() {
@@ -86,9 +95,23 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
   onOpen() {
     this.setState({ show: true });
+
+    const { thread_ts, messages } = this.state;
+    if (!thread_ts) return;
+
+    api
+      .get(`/messages?thread_ts=${thread_ts}`)
+      .then(res => this.setState({ messages: messages.concat(res.data) }));
   }
 
-  onSend() {}
+  onSend() {
+    const { thread_ts, messages, text } = this.state;
+    api.post('/messages', { thread_ts, text }).then(res => {
+      const data: YALCS.MessageInThread = res.data;
+      messages.push(data.message);
+      this.setState({ thread_ts: data.thread_ts, messages });
+    });
+  }
 
   render() {
     const { messages, show, text } = this.state;
@@ -127,6 +150,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             type="text"
             value={text}
             margin="normal"
+            rowsMax={2}
             onChange={e => this.setState({ text: e.target.value })}
             fullWidth
             multiline

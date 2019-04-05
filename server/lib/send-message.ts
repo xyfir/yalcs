@@ -4,7 +4,7 @@ import { YALCS } from 'types/yalcs';
 export async function sendMessage(
   { thread_ts, text }: { thread_ts?: string; text: string },
   ip: string
-): Promise<YALCS.Message> {
+): Promise<{ thread_ts: string; message: YALCS.Message }> {
   try {
     // Create first message which will start thread
     if (!thread_ts) {
@@ -28,7 +28,7 @@ export async function sendMessage(
       }
     });
 
-    return { text, ts: res.message.ts };
+    return { thread_ts, message: { text, ts: res.message.ts } };
   } catch (err) {
     console.error(err);
   }

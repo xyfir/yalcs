@@ -7,6 +7,6 @@ export function api_sendMessages(
   next: NextFunction
 ): void {
   sendMessage(req.body, req.ip)
-    .then(message => res.status(200).json(message))
+    .then(data => res.status(200).json(data))
     .catch(next);
 }

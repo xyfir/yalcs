@@ -65,6 +65,10 @@ export namespace YALCS {
        */
       THEME: any;
       /**
+       * Should the floating action button be on the right side?
+       */
+      FAB_ON_RIGHT?: boolean;
+      /**
        * URL for YALCS's API (yalcs-server)
        * @example "https://example.com/api/yalcs"
        */

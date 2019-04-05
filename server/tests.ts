@@ -5,6 +5,7 @@ import 'enve';
 import { verifySlackRequest } from 'lib/verify-slack-request';
 import { slackListener } from 'lib/slack-listener';
 import { MessageStore } from 'lib/MessageStore';
+import { getMessages } from 'lib/get-messages';
 import { createHmac } from 'crypto';
 import { YALCS } from 'types/yalcs';
 import 'jest-extended';
@@ -79,4 +80,24 @@ test('slackListener message', async () => {
 
   await slackListener(data, `v0=${hmac.digest('hex')}`, date);
   expect(MessageStore.read(thread_ts)).toMatchObject([_message]);
+});
+
+test('getMessages', async () => {
+  const thread_ts = '1234.5678';
+  const _message: YALCS.Message = {
+    text: 'test',
+    ts: '2345.6789'
+  };
+
+  MessageStore.save(thread_ts, _message);
+  let messages = await getMessages({ thread_ts, longpoll: false });
+  expect(messages).toMatchObject([_message]);
+
+  messages = await getMessages({ thread_ts, longpoll: false });
+  expect(messages).toMatchObject([]);
+
+  const promise = getMessages({ thread_ts, longpoll: true });
+  MessageStore.save(thread_ts, _message);
+  messages = await promise;
+  expect(messages).toMatchObject([_message]);
 });

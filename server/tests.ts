@@ -5,6 +5,7 @@ import 'enve';
 import { verifySlackRequest } from 'lib/verify-slack-request';
 import { slackListener } from 'lib/slack-listener';
 import { MessageStore } from 'lib/MessageStore';
+import { sendMessage } from 'lib/send-message';
 import { getMessages } from 'lib/get-messages';
 import { createHmac } from 'crypto';
 import { YALCS } from 'types/yalcs';
@@ -100,4 +101,18 @@ test('getMessages', async () => {
   MessageStore.save(thread_ts, _message);
   messages = await promise;
   expect(messages).toMatchObject([_message]);
+});
+
+test('sendMessage', async () => {
+  const res1 = await sendMessage({ text: Date.now().toString() }, '::1');
+  const res2 = await sendMessage(
+    { thread_ts: res1.thread_ts, text: Date.now().toString() },
+    '::1'
+  );
+  expect(res1.thread_ts).toMatch(/^\d+\.\d+$/);
+  expect(res1.message.text).toMatch(/^\d{13}$/);
+  expect(res1.message.ts).toMatch(/^\d+\.\d+$/);
+  expect(res2.thread_ts).toBe(res1.thread_ts);
+  expect(res2.message.text).toMatch(/^\d{13}$/);
+  expect(res2.message.ts).toMatch(/^\d+\.\d+$/);
 });

@@ -14,6 +14,7 @@ import {
   Fab
 } from '@material-ui/core';
 import {
+  ChatOutlined as ChatOutlinedIcon,
   Close as CloseIcon,
   Chat as ChatIcon,
   Send as SendIcon
@@ -21,10 +22,20 @@ import {
 
 const styles = (theme: Theme) =>
   createStyles({
+    chatOutline: {
+      fontSize: '1000%',
+      opacity: 0.1
+    },
     sendMessage: {
       alignItems: 'center',
       display: 'flex',
       margin: theme.spacing.unit
+    },
+    noMessages: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1
     },
     messages: {
       flex: 1
@@ -41,8 +52,10 @@ const styles = (theme: Theme) =>
       height: '100vh'
     },
     fab: {
+      [process.enve.FAB_ON_RIGHT ? 'right' : 'left']: 0,
       position: 'fixed',
-      bottom: '1em',
+      margin: theme.spacing.unit * 2,
+      bottom: '0',
       zIndex: 1
     }
   });
@@ -96,11 +109,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <div className={classes.messages}>
-          {messages.map(msg => (
-            <div key={msg.ts}>{msg.text}</div>
-          ))}
-        </div>
+        {messages.length ? (
+          <div className={classes.messages}>
+            {messages.map(msg => (
+              <div key={msg.ts}>{msg.text}</div>
+            ))}
+          </div>
+        ) : (
+          <div className={classes.noMessages}>
+            <ChatOutlinedIcon className={classes.chatOutline} />
+          </div>
+        )}
         <Divider />
         <div className={classes.sendMessage}>
           <TextField
@@ -111,14 +130,20 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             onChange={e => this.setState({ text: e.target.value })}
             fullWidth
             multiline
+            placeholder="Ask a question or give your feedback..."
           />
-          <IconButton onClick={() => this.onSend()} aria-label="Send message">
+          <IconButton
+            color="primary"
+            onClick={() => this.onSend()}
+            aria-label="Send message"
+          >
             <SendIcon />
           </IconButton>
         </div>
       </div>
     ) : (
       <Fab
+        color="secondary"
         onClick={() => this.onOpen()}
         variant="extended"
         className={classes.fab}

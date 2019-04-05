@@ -6,13 +6,13 @@ export async function slackListener(
     challenge?: string;
     event?: {
       thread_ts: string;
-      subtype: 'message_replied';
+      subtype: 'message_replied' | string;
       channel: string;
-      type: 'message';
+      type: 'message' | string;
       text: string;
       ts: string;
     };
-    type: 'url_verification' | 'event_callback';
+    type: 'url_verification' | 'event_callback' | string;
   },
   signature: string,
   timestamp: number

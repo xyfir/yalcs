@@ -23,7 +23,7 @@ export async function slackListener(
   if (data.type != 'event_callback') return;
   if (data.event.channel != process.enve.SLACK_CHANNEL) return;
   if (data.event.type != 'message') return;
-  if (data.event.subtype != 'message_replied') return;
+  if (!data.event.thread_ts) return;
 
   MessageStore.save(data.event.thread_ts, {
     text: data.event.text,

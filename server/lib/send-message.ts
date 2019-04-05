@@ -4,7 +4,7 @@ import { YALCS } from 'types/yalcs';
 export async function sendMessage(
   { thread_ts, text }: { thread_ts?: string; text: string },
   ip: string
-): Promise<{ thread_ts: string; message: YALCS.Message }> {
+): Promise<YALCS.MessageInThread> {
   try {
     // Create first message which will start thread
     if (!thread_ts) {

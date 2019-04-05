@@ -4,7 +4,12 @@ export namespace YALCS {
     text: string;
   }
 
-  export interface LocalStore {
+  export interface MessageInThread {
+    thread_ts: string;
+    message: YALCS.Message;
+  }
+
+  export interface Thread {
     thread_ts?: string;
     messages?: YALCS.Message[];
   }

@@ -1,10 +1,11 @@
 export namespace YALCS {
+  export interface Message {
+    ts: string;
+    text: string;
+  }
+
   export namespace Env {
     export interface Common {
-      /**
-       * Your application's name as you want it displayed to users
-       */
-      NAME: string;
       /**
        * Is this a production environment?
        */
@@ -31,6 +32,23 @@ export namespace YALCS {
        * @example "https://example.com/yalcs"
        */
       YALCS_WEB_URL: string;
+      /**
+       * The id/name of your Slack channel.
+       * @example "C2147483705"
+       * @example "#public-channel"
+       * @example "private-group"
+       */
+      SLACK_CHANNEL: string;
+      /**
+       * "Bot User OAuth Access Token"
+       * @example "xoxb-155739007072-602556479878-XXXXXXXXXXXXXXXXXXXXXXXX"
+       */
+      SLACK_BOT_TOKEN: string;
+      /**
+       * Secret Slack uses to sign requests to YALCS.
+       * @example "11b0904b7f4e261dfaca88de70a4935e"
+       */
+      SLACK_SIGNING_SECRET: string;
     }
 
     export interface Web extends YALCS.Env.Common {
@@ -42,7 +60,7 @@ export namespace YALCS {
        * Passed to Material-UI's `createMUITheme()`. Can be left an empty object
        * https://material-ui.com/style/color/#color-tool
        */
-      THEME: object;
+      THEME: any;
       /**
        * URL for YALCS's API (yalcs-server)
        * @example "https://example.com/api/yalcs"

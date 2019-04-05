@@ -4,6 +4,11 @@ export namespace YALCS {
     text: string;
   }
 
+  export interface LocalStore {
+    thread_ts?: string;
+    messages?: YALCS.Message[];
+  }
+
   export namespace Env {
     export interface Common {
       /**

@@ -28,7 +28,10 @@ export async function sendMessage(
       }
     });
 
-    return { thread_ts, message: { text, ts: res.message.ts } };
+    return {
+      thread_ts,
+      message: { outgoing: true, text, ts: res.message.ts }
+    };
   } catch (err) {
     console.error(err);
   }

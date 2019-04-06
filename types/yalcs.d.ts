@@ -2,6 +2,7 @@ export namespace YALCS {
   export interface Message {
     ts: string;
     text: string;
+    outgoing?: boolean;
   }
 
   export interface MessageInThread {

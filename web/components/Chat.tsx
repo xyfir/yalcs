@@ -16,6 +16,7 @@ import {
   Fab
 } from '@material-ui/core';
 import {
+  NotificationImportant as NotificationImportantIcon,
   ChatOutlined as ChatOutlinedIcon,
   Close as CloseIcon,
   Chat as ChatIcon,
@@ -80,6 +81,7 @@ const styles = (theme: Theme) =>
 
 interface ChatState extends YALCS.Thread {
   polling: boolean;
+  alert: boolean;
   show: boolean;
   text: string;
 }
@@ -88,6 +90,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   state: ChatState = {
     messages: [],
     polling: false,
+    alert: false,
     show: false,
     text: ''
   };
@@ -114,7 +117,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   onOpen() {
-    this.setState({ show: true });
+    this.setState({ show: true, alert: false });
   }
 
   onSend() {
@@ -131,13 +134,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     this.setState({ polling: true });
 
     api.get(`/messages?thread_ts=${thread_ts}&longpoll=1`).then(res => {
-      const { messages } = this.state;
-      this.setState({ messages: messages.concat(res.data), polling: false });
+      const { messages, show } = this.state;
+      this.setState({
+        messages: messages.concat(res.data),
+        polling: false,
+        alert: !show
+      });
     });
   }
 
   render() {
-    const { messages, show, text } = this.state;
+    const { messages, alert, show, text } = this.state;
     const { classes } = this.props;
     return show ? (
       <div className={classes.chat}>
@@ -201,6 +208,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
           </IconButton>
         </div>
       </div>
+    ) : alert ? (
+      <Fab
+        color="secondary"
+        onClick={() => this.onOpen()}
+        variant="extended"
+        className={classes.fab}
+        aria-label="You've got a reply"
+      >
+        <NotificationImportantIcon className={classes.fabIcon} />
+        Check your messages
+      </Fab>
     ) : (
       <Fab
         color="secondary"

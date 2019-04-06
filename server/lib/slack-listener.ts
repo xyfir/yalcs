@@ -6,7 +6,7 @@ export async function slackListener(
     challenge?: string;
     event?: {
       thread_ts: string;
-      subtype: 'message_replied' | string;
+      subtype: 'message_replied' | 'bot_message' | string;
       channel: string;
       type: 'message' | string;
       text: string;
@@ -24,6 +24,7 @@ export async function slackListener(
   if (data.event.channel != process.enve.SLACK_CHANNEL) return;
   if (data.event.type != 'message') return;
   if (!data.event.thread_ts) return;
+  if (data.event.subtype == 'bot_message') return;
 
   MessageStore.save(data.event.thread_ts, {
     text: data.event.text,

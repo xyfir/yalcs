@@ -57,6 +57,7 @@ const styles = (theme: Theme) =>
       flex: 1
     },
     messages: {
+      overflow: 'auto',
       flex: 1
     },
     fabIcon: {
@@ -112,6 +113,13 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     if (thread_ts && !polling) this.poll();
   }
 
+  onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key == 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.onSend();
+    }
+  }
+
   onClose() {
     this.setState({ show: false });
   }
@@ -133,14 +141,20 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { thread_ts } = this.state;
     this.setState({ polling: true });
 
-    api.get(`/messages?thread_ts=${thread_ts}&longpoll=1`).then(res => {
-      const { messages, show } = this.state;
-      this.setState({
-        messages: messages.concat(res.data),
-        polling: false,
-        alert: !show
+    api
+      .get('/messages', { params: { thread_ts, longpoll: true } })
+      .then(res => {
+        const { messages, show } = this.state;
+        this.setState({
+          messages: messages.concat(res.data),
+          polling: false,
+          alert: !show
+        });
+      })
+      .catch(err => {
+        console.error('yalcs polling error', err);
+        this.setState({ polling: false });
       });
-    });
   }
 
   render() {
@@ -194,9 +208,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             onChange={e => this.setState({ text: e.target.value })}
             fullWidth
             multiline
-            onKeyDown={e =>
-              e.key == 'Enter' && !e.shiftKey ? this.onSend() : null
-            }
+            onKeyDown={e => this.onKeyDown(e)}
             placeholder="Ask a question or give your feedback..."
           />
           <IconButton

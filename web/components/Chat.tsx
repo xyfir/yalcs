@@ -11,6 +11,7 @@ import {
   Divider,
   Toolbar,
   AppBar,
+  Paper,
   Theme,
   Fab
 } from '@material-ui/core';
@@ -23,6 +24,22 @@ import {
 
 const styles = (theme: Theme) =>
   createStyles({
+    outgoingMessage: {
+      backgroundColor: theme.palette.secondary.main,
+      borderRadius: '0.25em',
+      marginLeft: '6em',
+      padding: '0.5em',
+      margin: '1em',
+      color: theme.palette.secondary.contrastText
+    },
+    incomingMessage: {
+      backgroundColor: theme.palette.grey[100],
+      borderRadius: '0.25em',
+      marginRight: '6em',
+      padding: '0.5em',
+      margin: '1em',
+      color: theme.palette.getContrastText(theme.palette.grey[100])
+    },
     chatOutline: {
       fontSize: '1000%',
       opacity: 0.1
@@ -109,7 +126,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     api.post('/messages', { thread_ts, text }).then(res => {
       const data: YALCS.MessageInThread = res.data;
       messages.push(data.message);
-      this.setState({ thread_ts: data.thread_ts, messages });
+      this.setState({ thread_ts: data.thread_ts, messages, text: '' });
     });
   }
 
@@ -135,7 +152,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
         {messages.length ? (
           <div className={classes.messages}>
             {messages.map(msg => (
-              <div key={msg.ts}>{msg.text}</div>
+              <Paper
+                key={msg.ts}
+                elevation={1}
+                className={
+                  msg.outgoing
+                    ? classes.outgoingMessage
+                    : classes.incomingMessage
+                }
+              >
+                <Typography color="inherit">{msg.text}</Typography>
+              </Paper>
             ))}
           </div>
         ) : (

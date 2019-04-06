@@ -71,6 +71,16 @@ export namespace YALCS {
        */
       THEME: any;
       /**
+       * Floating Action Button text.
+       * @example "Have a question?"
+       */
+      FAB_TEXT: string;
+      /**
+       * Chat window title.
+       * @example "Send us a message..."
+       */
+      TITLE_TEXT: string;
+      /**
        * Should the floating action button be on the right side?
        */
       FAB_ON_RIGHT?: boolean;
@@ -79,6 +89,16 @@ export namespace YALCS {
        * @example "https://example.com/api/yalcs"
        */
       YALCS_API_URL: string;
+      /**
+       * Placeholder text for the message input.
+       * @example "Ask a question or give your feedback..."
+       */
+      MESSAGE_PLACEHOLDER_TEXT: string;
+      /**
+       * Floating Action Button text when unread messages are available.
+       * @example "Check your messages"
+       */
+      UNREAD_MESSAGES_FAB_TEXT: string;
     }
   }
 }

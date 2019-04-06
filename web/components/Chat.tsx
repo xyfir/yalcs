@@ -168,7 +168,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
         <AppBar position="static">
           <Toolbar>
             <Typography color="inherit" variant="h6" className={classes.title}>
-              Send us a message...
+              {process.enve.TITLE_TEXT}
             </Typography>
             <IconButton
               color="inherit"
@@ -213,7 +213,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             fullWidth
             multiline
             onKeyDown={e => this.onKeyDown(e)}
-            placeholder="Ask a question or give your feedback..."
+            placeholder={process.enve.MESSAGE_PLACEHOLDER_TEXT}
           />
           <IconButton
             color="primary"
@@ -230,10 +230,10 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
         onClick={() => this.onOpen()}
         variant="extended"
         className={classes.fab}
-        aria-label="You've got a reply"
+        aria-label={process.enve.UNREAD_MESSAGES_FAB_TEXT}
       >
         <NotificationImportantIcon className={classes.fabIcon} />
-        Check your messages
+        {process.enve.UNREAD_MESSAGES_FAB_TEXT}
       </Fab>
     ) : (
       <Fab
@@ -241,10 +241,10 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
         onClick={() => this.onOpen()}
         variant="extended"
         className={classes.fab}
-        aria-label="Send us a message"
+        aria-label={process.enve.FAB_TEXT}
       >
         <ChatIcon className={classes.fabIcon} />
-        Have a question?
+        {process.enve.FAB_TEXT}
       </Fab>
     );
   }

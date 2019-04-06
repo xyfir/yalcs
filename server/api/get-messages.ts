@@ -6,6 +6,7 @@ export function api_getMessages(
   res: Response,
   next: NextFunction
 ): void {
+  req.setTimeout(60 * 60 * 1000, () => null);
   getMessages(req.query)
     .then(messages => res.status(200).json(messages))
     .catch(next);

@@ -187,6 +187,9 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             onChange={e => this.setState({ text: e.target.value })}
             fullWidth
             multiline
+            onKeyDown={e =>
+              e.key == 'Enter' && !e.shiftKey ? this.onSend() : null
+            }
             placeholder="Ask a question or give your feedback..."
           />
           <IconButton

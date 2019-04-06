@@ -4,9 +4,6 @@
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "",
   "scripts": {
-    "watch-build": "webpack-cli --watch",
-    "start": "webpack-dev-server",
-    "check": "tsc --noEmit",
     "build": "webpack-cli"
   },
   "author": "Xyfir, LLC <contact@xyfir.com> (https://www.xyfir.com)",
@@ -20,7 +17,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-typescript": "^7.3.3",
     "@types/dotenv": "^6.1.0",

@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "yalcs-server": "2.0.0",
-    "yalcs-web": "2.0.0"
+    "yalcs-loader": "1.0.0",
+    "yalcs-server": "1.0.0",
+    "yalcs-web": "1.0.0"
   },
   "prettier": {
     "singleQuote": true

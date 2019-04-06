@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { YALCS } from 'types/yalcs';
 import { Chat } from 'components/Chat';
 import { hot } from 'react-hot-loader/root';
 import {
@@ -7,14 +6,6 @@ import {
   createMuiTheme,
   CssBaseline
 } from '@material-ui/core';
-
-declare global {
-  namespace NodeJS {
-    interface Process {
-      enve: YALCS.Env.Web;
-    }
-  }
-}
 
 const theme = createMuiTheme(process.enve.THEME);
 

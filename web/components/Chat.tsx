@@ -95,6 +95,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     show: false,
     text: ''
   };
+  anchor = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
     const data: YALCS.Thread =
@@ -105,10 +106,12 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   componentDidUpdate() {
-    const { thread_ts, messages, polling } = this.state;
+    const { thread_ts, messages, polling, show } = this.state;
 
     const data: YALCS.Thread = { thread_ts, messages };
     localStorage.setItem('yalcs', JSON.stringify(data));
+
+    if (show) this.anchor.current.scrollIntoView();
 
     if (thread_ts && !polling) this.poll();
   }
@@ -191,6 +194,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
                 <Typography color="inherit">{msg.text}</Typography>
               </Paper>
             ))}
+            <div ref={this.anchor} />
           </div>
         ) : (
           <div className={classes.noMessages}>

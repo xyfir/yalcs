@@ -79,6 +79,7 @@ const styles = (theme: Theme) =>
   });
 
 interface ChatState extends YALCS.Thread {
+  polling: boolean;
   show: boolean;
   text: string;
 }
@@ -86,6 +87,7 @@ interface ChatState extends YALCS.Thread {
 class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   state: ChatState = {
     messages: [],
+    polling: false,
     show: false,
     text: ''
   };
@@ -99,11 +101,12 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   componentDidUpdate() {
-    const data: YALCS.Thread = {
-      thread_ts: this.state.thread_ts,
-      messages: this.state.messages
-    };
+    const { thread_ts, messages, polling } = this.state;
+
+    const data: YALCS.Thread = { thread_ts, messages };
     localStorage.setItem('yalcs', JSON.stringify(data));
+
+    if (thread_ts && !polling) this.poll();
   }
 
   onClose() {
@@ -112,13 +115,6 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
   onOpen() {
     this.setState({ show: true });
-
-    const { thread_ts, messages } = this.state;
-    if (!thread_ts) return;
-
-    api
-      .get(`/messages?thread_ts=${thread_ts}`)
-      .then(res => this.setState({ messages: messages.concat(res.data) }));
   }
 
   onSend() {
@@ -127,6 +123,16 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
       const data: YALCS.MessageInThread = res.data;
       messages.push(data.message);
       this.setState({ thread_ts: data.thread_ts, messages, text: '' });
+    });
+  }
+
+  poll() {
+    const { thread_ts } = this.state;
+    this.setState({ polling: true });
+
+    api.get(`/messages?thread_ts=${thread_ts}&longpoll=1`).then(res => {
+      const { messages } = this.state;
+      this.setState({ messages: messages.concat(res.data), polling: false });
     });
   }
 

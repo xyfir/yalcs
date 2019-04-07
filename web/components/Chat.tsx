@@ -63,6 +63,10 @@ const styles = (theme: Theme) =>
     fabIcon: {
       marginRight: theme.spacing.unit
     },
+    appBar: {
+      borderBottomRightRadius: '0',
+      borderBottomLeftRadius: '0'
+    },
     title: {
       flex: 1
     },
@@ -169,7 +173,12 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { classes } = this.props;
     return show ? (
       <Paper elevation={1} className={classes.chat}>
-        <AppBar position="static">
+        <AppBar
+          position="static"
+          elevation={0}
+          classes={{ root: classes.appBar }}
+          square={false}
+        >
           <Toolbar>
             <Typography color="inherit" variant="h6" className={classes.title}>
               {process.enve.TITLE_TEXT}

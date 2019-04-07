@@ -69,14 +69,12 @@ const styles = (theme: Theme) =>
     chat: {
       flexDirection: 'column',
       display: 'flex',
-      height: '100vh'
+      // Expand to iframe container's size
+      height: '100vh',
+      width: '100vw'
     },
     fab: {
-      [process.enve.FAB_ON_RIGHT ? 'right' : 'left']: 0,
-      position: 'fixed',
-      margin: theme.spacing.unit * 2,
-      bottom: '0',
-      zIndex: 1
+      margin: theme.spacing.unit * 2
     }
   });
 
@@ -105,7 +103,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     this.setState(data);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState: ChatState) {
     const { thread_ts, messages, polling, show } = this.state;
 
     const data: YALCS.Thread = { thread_ts, messages };
@@ -114,6 +112,11 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     if (show) this.anchor.current.scrollIntoView();
 
     if (thread_ts && !polling) this.poll();
+
+    if (prevState.show != show) {
+      const event: YALCS.EventData = { yalcs: true, show };
+      window.parent.postMessage(event, '*');
+    }
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {

@@ -13,7 +13,7 @@ module.exports = {
     libraryTarget: 'umd',
     filename: 'yalcs-loader.js',
     library: 'YALCSLoader',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, '../web/dist')
   },
 
   resolve: {
@@ -49,7 +49,11 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify(process.enve.NODE_ENV),
+      'process.enve': Object.entries(process.enve).reduce((o, [k, v]) => {
+        o[k] = JSON.stringify(v);
+        return o;
+      }, {})
     })
   ]
 };

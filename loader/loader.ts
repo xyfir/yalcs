@@ -29,7 +29,7 @@ window.addEventListener('message', event => {
     // Modal
     if (window.innerWidth > 600) {
       iframe.style.height = '500px';
-      iframe.style.width = '300px';
+      iframe.style.width = '350px';
     }
     // Fullscreen
     else {

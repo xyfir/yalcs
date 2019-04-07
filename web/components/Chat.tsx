@@ -70,8 +70,9 @@ const styles = (theme: Theme) =>
       flexDirection: 'column',
       display: 'flex',
       // Expand to iframe container's size
-      height: '100vh',
-      width: '100vw'
+      margin: theme.spacing.unit,
+      height: `calc(100vh - ${theme.spacing.unit * 2}px)`,
+      width: `calc(100vw - ${theme.spacing.unit * 2}px)`
     },
     fab: {
       margin: theme.spacing.unit * 2
@@ -167,7 +168,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { messages, alert, show, text } = this.state;
     const { classes } = this.props;
     return show ? (
-      <div className={classes.chat}>
+      <Paper elevation={1} className={classes.chat}>
         <AppBar position="static">
           <Toolbar>
             <Typography color="inherit" variant="h6" className={classes.title}>
@@ -187,7 +188,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             {messages.map(msg => (
               <Paper
                 key={msg.ts}
-                elevation={1}
+                elevation={2}
                 className={
                   msg.outgoing
                     ? classes.outgoingMessage
@@ -226,7 +227,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             <SendIcon />
           </IconButton>
         </div>
-      </div>
+      </Paper>
     ) : alert ? (
       <Fab
         color="secondary"

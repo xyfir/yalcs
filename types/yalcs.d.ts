@@ -15,6 +15,11 @@ export namespace YALCS {
     messages?: YALCS.Message[];
   }
 
+  export interface EventData {
+    yalcs: true;
+    show: boolean;
+  }
+
   export namespace Env {
     export interface Common {
       /**
@@ -39,7 +44,7 @@ export namespace YALCS {
        */
       WEB_DIRECTORY: string;
       /**
-       * URL for YALCS's web client (where your users will access it)
+       * URL for YALCS's embedded web client
        * @example "https://example.com/yalcs"
        */
       YALCS_WEB_URL: string;
@@ -81,10 +86,6 @@ export namespace YALCS {
        */
       TITLE_TEXT: string;
       /**
-       * Should the floating action button be on the right side?
-       */
-      FAB_ON_RIGHT?: boolean;
-      /**
        * URL for YALCS's API (yalcs-server)
        * @example "https://example.com/api/yalcs"
        */
@@ -99,6 +100,18 @@ export namespace YALCS {
        * @example "Check your messages"
        */
       UNREAD_MESSAGES_FAB_TEXT: string;
+    }
+
+    export interface Loader extends YALCS.Env.Common {
+      /**
+       * Should the floating action button be on the right side?
+       */
+      FAB_ON_RIGHT?: boolean;
+      /**
+       * URL for YALCS's embedded web client
+       * @example "https://example.com/yalcs"
+       */
+      YALCS_WEB_URL: string;
     }
   }
 }

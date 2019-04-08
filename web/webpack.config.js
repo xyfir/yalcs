@@ -94,7 +94,7 @@ module.exports = {
     historyApiFallback: true,
     /** @todo remove this eventually */
     disableHostCheck: true,
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: [path.join(__dirname, 'dist'), __dirname],
     port: process.enve.PORT,
     host: '0.0.0.0',
     hot: true

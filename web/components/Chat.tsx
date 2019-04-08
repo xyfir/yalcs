@@ -159,7 +159,8 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   onSend() {
     // Send message and push to state if successful
     const { thread_ts, messages, text } = this.state;
-    api.post('/messages', { thread_ts, text }).then(res => {
+    const opt: Yalcs.SendMessageOptions = { thread_ts, text };
+    api.post('/messages', opt).then(res => {
       const data: Yalcs.MessageInThread = res.data;
       messages.push(data.message);
       this.setState({ thread_ts: data.thread_ts, messages, text: '' });
@@ -172,8 +173,9 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
     // Keep connection alive until a new message is received
     // Will automatically reconnect on component update if !polling
+    const opt: Yalcs.GetMessageOptions = { thread_ts, longpoll: true };
     api
-      .get('/messages', { params: { thread_ts, longpoll: true } })
+      .get('/messages', { params: opt })
       .then(res => {
         const { messages, show } = this.state;
         this.setState({

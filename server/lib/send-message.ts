@@ -1,10 +1,11 @@
 import * as request from 'request-promise-native';
 import { Yalcs } from 'types/yalcs';
 
-export async function sendMessage(
-  { thread_ts, text }: { thread_ts?: string; text: string },
-  ip: string
-): Promise<Yalcs.MessageInThread> {
+export async function sendMessage({
+  thread_ts,
+  text,
+  ip
+}: Yalcs.SendMessageOptions): Promise<Yalcs.MessageInThread> {
   try {
     // Create first message which will start thread
     if (!thread_ts) {

@@ -1,8 +1,8 @@
 export namespace Yalcs {
   export interface Message {
-    ts: string;
-    text: string;
     outgoing?: boolean;
+    text: string;
+    ts: string;
   }
 
   export interface MessageInThread {
@@ -18,6 +18,17 @@ export namespace Yalcs {
   export interface EventData {
     yalcs: true;
     show: boolean;
+  }
+
+  export interface SendMessageOptions {
+    thread_ts?: string;
+    text: string;
+    ip?: string;
+  }
+
+  export interface GetMessageOptions {
+    thread_ts: string;
+    longpoll: boolean;
   }
 
   export namespace Env {

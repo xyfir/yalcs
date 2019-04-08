@@ -19,6 +19,7 @@ export async function slackListener(
 ): Promise<any> {
   verifySlackRequest(signature, timestamp, data);
 
+  // Ignore all non-thread reply events
   if (data.type == 'url_verification') return data.challenge;
   if (data.type != 'event_callback') return;
   if (data.event.channel != process.enve.SLACK_CHANNEL) return;
@@ -26,6 +27,7 @@ export async function slackListener(
   if (!data.event.thread_ts) return;
   if (data.event.subtype == 'bot_message') return;
 
+  // Store message to memory or pass to subscriber
   MessageStore.save(data.event.thread_ts, {
     text: data.event.text,
     ts: data.event.ts

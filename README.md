@@ -114,6 +114,16 @@ Let's return to the Slack API dashboard again.
 2. For the _Request URL_ field, input the full URL to your instance of Yalcs server (the API), and then append to that URL `/slack`. It will should look something like this: `https://example.com/yalcs/api/slack`. It should verify.
 3. Under _Subscribe to Bot Events_, add `message.channels` if you're adding Yalcs to a public channel or `message.groups` if you're adding Yalcs to a private channel/group.
 
+## Step 7: Add Yalcs to your app
+
+Now all that's left is to add the Yalcs loader to one of your page's HTML. Wherever you'd like it to run, add the following to the bottom of `<body>`:
+
+```html
+<script src="/yalcs/static/yalcs-loader.js"></script>
+```
+
+Note that the source is fully dependent on where your app is serving the Yalcs web client files from and the URL of the page(s) where you're importing the loader. It should generally be a URL that combines `YALCS_WEB_URL` with `STATIC_PATH` and `"yalcs-loader.js"`.
+
 ## Contribute
 
 If you'd like to help work on Yalcs, the tutorial above will suffice to get you up and running. Certain things however will make your life easier:

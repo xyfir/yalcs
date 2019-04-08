@@ -113,6 +113,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   anchor = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
+    // Load data from localStorage into state
     const data: YALCS.Thread =
       localStorage.getItem('yalcs') !== undefined
         ? JSON.parse(localStorage.getItem('yalcs'))
@@ -123,13 +124,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   componentDidUpdate(prevProps, prevState: ChatState) {
     const { thread_ts, messages, polling, show } = this.state;
 
+    // Update localStorage from state
     const data: YALCS.Thread = { thread_ts, messages };
     localStorage.setItem('yalcs', JSON.stringify(data));
 
+    // Scroll to anchor element (bottom of message list)
     if (show) this.anchor.current.scrollIntoView();
 
+    // Begin polling for new messages
     if (thread_ts && !polling) this.poll();
 
+    // Notify parent window of new show state
     if (prevState.show != show) {
       const event: YALCS.EventData = { yalcs: true, show };
       window.parent.postMessage(event, '*');
@@ -137,10 +142,10 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      this.onSend();
-    }
+    // Send on Enter, allow multiple lines while holding Shift
+    if (e.key != 'Enter' || !e.shiftKey) return;
+    e.preventDefault();
+    this.onSend();
   }
 
   onClose() {
@@ -152,6 +157,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   onSend() {
+    // Send message and push to state if successful
     const { thread_ts, messages, text } = this.state;
     api.post('/messages', { thread_ts, text }).then(res => {
       const data: YALCS.MessageInThread = res.data;
@@ -164,6 +170,8 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { thread_ts } = this.state;
     this.setState({ polling: true });
 
+    // Keep connection alive until a new message is received
+    // Will automatically reconnect on component update if !polling
     api
       .get('/messages', { params: { thread_ts, longpoll: true } })
       .then(res => {
@@ -171,6 +179,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
         this.setState({
           messages: messages.concat(res.data),
           polling: false,
+          // Show alert fab if chat window is closed
           alert: !show
         });
       })
@@ -210,6 +219,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
                 </IconButton>
               </Toolbar>
             </AppBar>
+
             {messages.length ? (
               <div className={classes.messages}>
                 {messages.map(msg => (
@@ -232,7 +242,9 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
                 <ChatOutlinedIcon className={classes.chatOutline} />
               </div>
             )}
+
             <Divider />
+
             <div className={classes.sendMessage}>
               <TextField
                 id="message-text"
@@ -257,6 +269,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             </div>
           </Paper>
         ) : null}
+
         {alert ? (
           <Fab
             color="secondary"

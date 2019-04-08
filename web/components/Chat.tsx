@@ -113,23 +113,19 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   anchor = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
-    // Load data from localStorage into state
-    const data: Yalcs.Thread =
-      localStorage.getItem('yalcs') !== undefined
-        ? JSON.parse(localStorage.getItem('yalcs'))
-        : {};
-    this.setState(data);
+    this.setState({
+      thread_ts: localStorage.getItem('yalcs.thread_ts') || undefined
+    });
   }
 
   componentDidUpdate(prevProps, prevState: ChatState) {
     const { thread_ts, messages, polling, show } = this.state;
 
     // Update localStorage from state
-    const data: Yalcs.Thread = { thread_ts, messages };
-    localStorage.setItem('yalcs', JSON.stringify(data));
+    localStorage.setItem('yalcs.thread_ts', thread_ts);
 
     // Scroll to anchor element (bottom of message list)
-    if (show) this.anchor.current.scrollIntoView();
+    if (show && messages.length) this.anchor.current.scrollIntoView();
 
     // Begin polling for new messages
     if (thread_ts && !polling) this.poll();
@@ -143,7 +139,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
   onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     // Send on Enter, allow multiple lines while holding Shift
-    if (e.key != 'Enter' || !e.shiftKey) return;
+    if (e.key != 'Enter' || e.shiftKey) return;
     e.preventDefault();
     this.onSend();
   }

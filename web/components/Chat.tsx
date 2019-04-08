@@ -63,6 +63,9 @@ const styles = (theme: Theme) =>
     fabIcon: {
       marginRight: theme.spacing.unit
     },
+    textarea: {
+      overflowY: 'hidden'
+    },
     appBar: {
       borderBottomRightRadius: '0',
       borderBottomLeftRadius: '0'
@@ -227,6 +230,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             multiline
             onKeyDown={e => this.onKeyDown(e)}
             placeholder={process.enve.MESSAGE_PLACEHOLDER_TEXT}
+            InputProps={{ classes: { inputMultiline: classes.textarea } }}
           />
           <IconButton
             color="primary"

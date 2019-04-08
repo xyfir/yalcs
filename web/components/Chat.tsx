@@ -161,9 +161,8 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { thread_ts, messages, text } = this.state;
     const opt: Yalcs.SendMessageOptions = { thread_ts, text };
     api.post('/messages', opt).then(res => {
-      const data: Yalcs.MessageInThread = res.data;
-      messages.push(data.message);
-      this.setState({ thread_ts: data.thread_ts, messages, text: '' });
+      const thread: Yalcs.Thread = res.data;
+      this.setState({ ...thread, text: '' });
     });
   }
 

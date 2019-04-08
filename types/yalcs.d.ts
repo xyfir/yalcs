@@ -5,11 +5,6 @@ export namespace Yalcs {
     ts: string;
   }
 
-  export interface MessageInThread {
-    thread_ts: string;
-    message: Yalcs.Message;
-  }
-
   export interface Thread {
     thread_ts?: string;
     messages?: Yalcs.Message[];

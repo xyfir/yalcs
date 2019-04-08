@@ -110,16 +110,19 @@ test('getThread', async () => {
 });
 
 test('sendMessage', async () => {
-  const res1 = await sendMessage({ text: Date.now().toString(), ip: '::1' });
-  const res2 = await sendMessage({
-    thread_ts: res1.thread_ts,
+  const newThread = await sendMessage({
     text: Date.now().toString(),
     ip: '::1'
   });
-  expect(res1.thread_ts).toMatch(/^\d+\.\d+$/);
-  expect(res1.message.text).toMatch(/^\d{13}$/);
-  expect(res1.message.ts).toMatch(/^\d+\.\d+$/);
-  expect(res2.thread_ts).toBe(res1.thread_ts);
-  expect(res2.message.text).toMatch(/^\d{13}$/);
-  expect(res2.message.ts).toMatch(/^\d+\.\d+$/);
+  const updatedThread = await sendMessage({
+    thread_ts: newThread.thread_ts,
+    text: Date.now().toString(),
+    ip: '::1'
+  });
+  expect(newThread.thread_ts).toMatch(/^\d+\.\d+$/);
+  expect(newThread.messages[0].text).toMatch(/^\d{13}$/);
+  expect(newThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
+  expect(updatedThread.thread_ts).toBe(newThread.thread_ts);
+  expect(updatedThread.messages[0].text).toMatch(/^\d{13}$/);
+  expect(updatedThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
 });

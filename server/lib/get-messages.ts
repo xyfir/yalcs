@@ -1,5 +1,5 @@
 import { MessageStore } from 'lib/MessageStore';
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 
 export async function getMessages({
   thread_ts,
@@ -7,7 +7,7 @@ export async function getMessages({
 }: {
   thread_ts: string;
   longpoll: boolean;
-}): Promise<YALCS.Message[]> {
+}): Promise<Yalcs.Message[]> {
   // Return messages held in memory
   const messages = MessageStore.read(thread_ts);
   if (messages.length || !longpoll) return messages;

@@ -12,7 +12,7 @@ module.exports = {
   output: {
     libraryTarget: 'umd',
     filename: 'yalcs-loader.js',
-    library: 'YALCSLoader',
+    library: 'YalcsLoader',
     path: path.resolve(__dirname, '../web/dist')
   },
 

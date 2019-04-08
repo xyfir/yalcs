@@ -7,12 +7,12 @@ import * as bodyParser from 'body-parser';
 import * as Express from 'express';
 import { resolve } from 'path';
 import { router } from 'api/router';
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 
 declare global {
   namespace NodeJS {
     interface Process {
-      enve: YALCS.Env.Server;
+      enve: Yalcs.Env.Server;
     }
   }
 }

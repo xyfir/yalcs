@@ -1,9 +1,9 @@
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 
 declare global {
   namespace NodeJS {
     interface Process {
-      enve: YALCS.Env.Loader;
+      enve: Yalcs.Env.Loader;
     }
   }
 }
@@ -21,7 +21,7 @@ iframe.src = process.enve.YALCS_WEB_URL;
 document.body.appendChild(iframe);
 
 window.addEventListener('message', event => {
-  const { yalcs, show } = event.data as YALCS.EventData;
+  const { yalcs, show } = event.data as Yalcs.EventData;
   if (!yalcs) return;
 
   // Display chat window

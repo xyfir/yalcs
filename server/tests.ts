@@ -8,13 +8,13 @@ import { MessageStore } from 'lib/MessageStore';
 import { sendMessage } from 'lib/send-message';
 import { getMessages } from 'lib/get-messages';
 import { createHmac } from 'crypto';
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 import 'jest-extended';
 
 test('MessageStore', async () => {
   expect.assertions(3);
 
-  const _message: YALCS.Message = {
+  const _message: Yalcs.Message = {
     text: 'test',
     ts: '2345.6789'
   };
@@ -60,7 +60,7 @@ test('slackListener message', async () => {
   expect.assertions(1);
 
   const thread_ts = '1234.5678';
-  const _message: YALCS.Message = {
+  const _message: Yalcs.Message = {
     text: 'test',
     ts: '2345.6789'
   };
@@ -85,7 +85,7 @@ test('slackListener message', async () => {
 
 test('getMessages', async () => {
   const thread_ts = '1234.5678';
-  const _message: YALCS.Message = {
+  const _message: Yalcs.Message = {
     text: 'test',
     ts: '2345.6789'
   };

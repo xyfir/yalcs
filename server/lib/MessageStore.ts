@@ -1,11 +1,11 @@
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 
-type ThreadListener = (message: YALCS.Message) => void;
+type ThreadListener = (message: Yalcs.Message) => void;
 
 interface Threads {
   [thread_ts: string]: {
     listener?: ThreadListener;
-    messages: YALCS.Message[];
+    messages: Yalcs.Message[];
   };
 }
 
@@ -20,7 +20,7 @@ export class MessageStore {
     else this.threads[thread_ts].listener = listener;
   }
 
-  static save(thread_ts: string, message: YALCS.Message): void {
+  static save(thread_ts: string, message: Yalcs.Message): void {
     // Initialize thread
     if (!this.threads[thread_ts]) {
       this.threads[thread_ts] = { messages: [message] };
@@ -36,7 +36,7 @@ export class MessageStore {
     }
   }
 
-  static read(thread_ts: string): YALCS.Message[] {
+  static read(thread_ts: string): Yalcs.Message[] {
     if (!this.threads[thread_ts]) return [];
     const { messages } = this.threads[thread_ts];
     this.threads[thread_ts].messages = [];

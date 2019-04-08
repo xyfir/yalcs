@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { YALCS } from 'types/yalcs';
+import { Yalcs } from 'types/yalcs';
 import { api } from 'lib/api';
 import {
   createStyles,
@@ -95,7 +95,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface ChatState extends YALCS.Thread {
+interface ChatState extends Yalcs.Thread {
   polling: boolean;
   alert: boolean;
   show: boolean;
@@ -114,7 +114,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
   componentDidMount() {
     // Load data from localStorage into state
-    const data: YALCS.Thread =
+    const data: Yalcs.Thread =
       localStorage.getItem('yalcs') !== undefined
         ? JSON.parse(localStorage.getItem('yalcs'))
         : {};
@@ -125,7 +125,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const { thread_ts, messages, polling, show } = this.state;
 
     // Update localStorage from state
-    const data: YALCS.Thread = { thread_ts, messages };
+    const data: Yalcs.Thread = { thread_ts, messages };
     localStorage.setItem('yalcs', JSON.stringify(data));
 
     // Scroll to anchor element (bottom of message list)
@@ -136,7 +136,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
     // Notify parent window of new show state
     if (prevState.show != show) {
-      const event: YALCS.EventData = { yalcs: true, show };
+      const event: Yalcs.EventData = { yalcs: true, show };
       window.parent.postMessage(event, '*');
     }
   }
@@ -160,7 +160,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     // Send message and push to state if successful
     const { thread_ts, messages, text } = this.state;
     api.post('/messages', { thread_ts, text }).then(res => {
-      const data: YALCS.MessageInThread = res.data;
+      const data: Yalcs.MessageInThread = res.data;
       messages.push(data.message);
       this.setState({ thread_ts: data.thread_ts, messages, text: '' });
     });

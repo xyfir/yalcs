@@ -1,4 +1,4 @@
-export namespace YALCS {
+export namespace Yalcs {
   export interface Message {
     ts: string;
     text: string;
@@ -7,12 +7,12 @@ export namespace YALCS {
 
   export interface MessageInThread {
     thread_ts: string;
-    message: YALCS.Message;
+    message: Yalcs.Message;
   }
 
   export interface Thread {
     thread_ts?: string;
-    messages?: YALCS.Message[];
+    messages?: Yalcs.Message[];
   }
 
   export interface EventData {
@@ -41,7 +41,7 @@ export namespace YALCS {
        */
       WEB_DIRECTORY: string;
       /**
-       * URL for YALCS's embedded web client
+       * URL for the Yalcs embedded web client
        * @example "https://example.com/yalcs"
        */
       YALCS_WEB_URL: string;
@@ -52,11 +52,11 @@ export namespace YALCS {
       SLACK_CHANNEL: string;
       /**
        * "Bot User OAuth Access Token"
-       * @example "xoxb-155739007072-602556479878-XXXXXXXXXXXXXXXXXXXXXXXX"
+       * @example "xoxb-155555555555-600000000000-XXXXXXXXXXXXXXXXXXXXXXXX"
        */
       SLACK_BOT_TOKEN: string;
       /**
-       * Secret Slack uses to sign requests to YALCS.
+       * Secret Slack uses to sign requests to Yalcs.
        * @example "11b0904b7f4e261dfaca88de70a4935e"
        */
       SLACK_SIGNING_SECRET: string;
@@ -64,7 +64,7 @@ export namespace YALCS {
 
     export interface Web {
       /**
-       * Port for the Webpack dev server. Only needed for YALCS developers
+       * Port for the Webpack dev server. Only needed for Yalcs developers
        */
       PORT: number;
       /**
@@ -96,7 +96,7 @@ export namespace YALCS {
        */
       FAB_ON_RIGHT?: boolean;
       /**
-       * URL for YALCS's API (yalcs-server)
+       * URL for the Yalcs API (yalcs-server)
        * @example "https://example.com/api/yalcs"
        */
       YALCS_API_URL: string;
@@ -122,7 +122,7 @@ export namespace YALCS {
        */
       FAB_ON_RIGHT?: boolean;
       /**
-       * URL for YALCS's embedded web client
+       * URL for the Yalcs embedded web client
        * @example "https://example.com/yalcs"
        */
       YALCS_WEB_URL: string;

@@ -56,6 +56,9 @@ const styles = (theme: Theme) =>
       justifyContent: 'center',
       flex: 1
     },
+    hiddenFab: {
+      transform: 'translate(0, 150%)'
+    },
     messages: {
       overflow: 'auto',
       flex: 1
@@ -74,6 +77,7 @@ const styles = (theme: Theme) =>
       flex: 1
     },
     chat: {
+      transition: '0.5s',
       flexDirection: 'column',
       display: 'flex',
       // Expand to iframe container's size
@@ -82,7 +86,12 @@ const styles = (theme: Theme) =>
       width: `calc(100vw - ${theme.spacing.unit * 2}px)`
     },
     fab: {
-      margin: theme.spacing.unit * 2
+      transition: '0.5s',
+      position: 'fixed',
+      bottom: '0',
+      zIndex: -1,
+      margin: theme.spacing.unit * 2,
+      right: process.enve.FAB_ON_RIGHT ? '0' : ''
     }
   });
 
@@ -174,95 +183,104 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   render() {
     const { messages, alert, show, text } = this.state;
     const { classes } = this.props;
-    return show ? (
-      <Paper elevation={1} className={classes.chat}>
-        <AppBar
-          position="static"
-          elevation={0}
-          classes={{ root: classes.appBar }}
-          square={false}
-        >
-          <Toolbar>
-            <Typography color="inherit" variant="h6" className={classes.title}>
-              {process.enve.TITLE_TEXT}
-            </Typography>
-            <IconButton
-              color="inherit"
-              onClick={() => this.onClose()}
-              aria-label="Close chat"
+    return (
+      <React.Fragment>
+        {show ? (
+          <Paper elevation={1} className={classes.chat}>
+            <AppBar
+              position="static"
+              elevation={0}
+              classes={{ root: classes.appBar }}
+              square={false}
             >
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        {messages.length ? (
-          <div className={classes.messages}>
-            {messages.map(msg => (
-              <Paper
-                key={msg.ts}
-                elevation={2}
-                className={
-                  msg.outgoing
-                    ? classes.outgoingMessage
-                    : classes.incomingMessage
-                }
+              <Toolbar>
+                <Typography
+                  color="inherit"
+                  variant="h6"
+                  className={classes.title}
+                >
+                  {process.enve.TITLE_TEXT}
+                </Typography>
+                <IconButton
+                  color="inherit"
+                  onClick={() => this.onClose()}
+                  aria-label="Close chat"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Toolbar>
+            </AppBar>
+            {messages.length ? (
+              <div className={classes.messages}>
+                {messages.map(msg => (
+                  <Paper
+                    key={msg.ts}
+                    elevation={2}
+                    className={
+                      msg.outgoing
+                        ? classes.outgoingMessage
+                        : classes.incomingMessage
+                    }
+                  >
+                    <Typography color="inherit">{msg.text}</Typography>
+                  </Paper>
+                ))}
+                <div ref={this.anchor} />
+              </div>
+            ) : (
+              <div className={classes.noMessages}>
+                <ChatOutlinedIcon className={classes.chatOutline} />
+              </div>
+            )}
+            <Divider />
+            <div className={classes.sendMessage}>
+              <TextField
+                id="message-text"
+                type="text"
+                value={text}
+                margin="normal"
+                rowsMax={2}
+                onChange={e => this.setState({ text: e.target.value })}
+                fullWidth
+                multiline
+                onKeyDown={e => this.onKeyDown(e)}
+                placeholder={process.enve.MESSAGE_PLACEHOLDER_TEXT}
+                InputProps={{ classes: { inputMultiline: classes.textarea } }}
+              />
+              <IconButton
+                color="primary"
+                onClick={() => this.onSend()}
+                aria-label="Send message"
               >
-                <Typography color="inherit">{msg.text}</Typography>
-              </Paper>
-            ))}
-            <div ref={this.anchor} />
-          </div>
-        ) : (
-          <div className={classes.noMessages}>
-            <ChatOutlinedIcon className={classes.chatOutline} />
-          </div>
-        )}
-        <Divider />
-        <div className={classes.sendMessage}>
-          <TextField
-            id="message-text"
-            type="text"
-            value={text}
-            margin="normal"
-            rowsMax={2}
-            onChange={e => this.setState({ text: e.target.value })}
-            fullWidth
-            multiline
-            onKeyDown={e => this.onKeyDown(e)}
-            placeholder={process.enve.MESSAGE_PLACEHOLDER_TEXT}
-            InputProps={{ classes: { inputMultiline: classes.textarea } }}
-          />
-          <IconButton
-            color="primary"
-            onClick={() => this.onSend()}
-            aria-label="Send message"
+                <SendIcon />
+              </IconButton>
+            </div>
+          </Paper>
+        ) : null}
+        {alert ? (
+          <Fab
+            color="secondary"
+            onClick={() => this.onOpen()}
+            variant="extended"
+            className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
+            aria-label={process.enve.UNREAD_MESSAGES_FAB_TEXT}
           >
-            <SendIcon />
-          </IconButton>
-        </div>
-      </Paper>
-    ) : alert ? (
-      <Fab
-        color="secondary"
-        onClick={() => this.onOpen()}
-        variant="extended"
-        className={classes.fab}
-        aria-label={process.enve.UNREAD_MESSAGES_FAB_TEXT}
-      >
-        <NotificationImportantIcon className={classes.fabIcon} />
-        {process.enve.UNREAD_MESSAGES_FAB_TEXT}
-      </Fab>
-    ) : (
-      <Fab
-        color="secondary"
-        onClick={() => this.onOpen()}
-        variant="extended"
-        className={classes.fab}
-        aria-label={process.enve.FAB_TEXT}
-      >
-        <ChatIcon className={classes.fabIcon} />
-        {process.enve.FAB_TEXT}
-      </Fab>
+            <NotificationImportantIcon className={classes.fabIcon} />
+            {process.enve.UNREAD_MESSAGES_FAB_TEXT}
+          </Fab>
+        ) : (
+          <Fab
+            color="secondary"
+            onClick={() => this.onOpen()}
+            variant="extended"
+            className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
+            aria-label={process.enve.FAB_TEXT}
+          >
+            <ChatIcon className={classes.fabIcon} />
+            {process.enve.FAB_TEXT}
+          </Fab>
+        )}
+      </React.Fragment>
     );
   }
 }

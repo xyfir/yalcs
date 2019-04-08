@@ -26,7 +26,7 @@ export namespace Yalcs {
     ip?: string;
   }
 
-  export interface GetMessageOptions {
+  export interface GetThreadOptions {
     thread_ts: string;
     longpoll: boolean;
   }
@@ -37,6 +37,11 @@ export namespace Yalcs {
        * Port the API will be hosted on
        */
       PORT: number;
+      /**
+       * Options for the user database (uses node-persist). All that's needed is `dir`
+       * https://www.npmjs.com/package/node-persist#async-initoptions-callback
+       */
+      STORAGE: any;
       /**
        * Is this a production environment?
        */

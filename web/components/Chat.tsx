@@ -173,13 +173,13 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
     // Keep connection alive until a new message is received
     // Will automatically reconnect on component update if !polling
-    const opt: Yalcs.GetMessageOptions = { thread_ts, longpoll: true };
+    const opt: Yalcs.GetThreadOptions = { thread_ts, longpoll: true };
     api
-      .get('/messages', { params: opt })
+      .get('/thread', { params: opt })
       .then(res => {
         const { messages, show } = this.state;
         this.setState({
-          messages: messages.concat(res.data),
+          ...res.data,
           polling: false,
           // Show alert fab if chat window is closed
           alert: !show

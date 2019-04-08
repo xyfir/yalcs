@@ -1,3 +1,3 @@
-export * from './get-messages';
+export * from './get-thread';
 export * from './send-message';
 export * from './slack-listener';

@@ -1,5 +1,5 @@
 import { verifySlackRequest } from 'lib/verify-slack-request';
-import { MessageStore } from 'lib/MessageStore';
+import { ThreadStore } from 'lib/ThreadStore';
 
 export async function slackListener(
   data: {
@@ -27,9 +27,12 @@ export async function slackListener(
   if (!data.event.thread_ts) return;
   if (data.event.subtype == 'bot_message') return;
 
-  // Store message to memory or pass to subscriber
-  MessageStore.save(data.event.thread_ts, {
-    text: data.event.text,
-    ts: data.event.ts
-  });
+  // Load thread
+  const thread = await ThreadStore.read(data.event.thread_ts);
+
+  // Add message to thread
+  thread.messages.push({ text: data.event.text, ts: data.event.ts });
+
+  // Save message to disk and optionally notify subscriber
+  await ThreadStore.save(thread);
 }

@@ -21,7 +21,11 @@ export namespace YALCS {
   }
 
   export namespace Env {
-    export interface Common {
+    export interface Server {
+      /**
+       * Port the API will be hosted on
+       */
+      PORT: number;
       /**
        * Is this a production environment?
        */
@@ -31,13 +35,6 @@ export namespace YALCS {
        * @example "/static/"
        */
       STATIC_PATH: string;
-    }
-
-    export interface Server extends YALCS.Env.Common {
-      /**
-       * Port the API will be hosted on
-       */
-      PORT: number;
       /**
        * Absolute path for yalcs-web.
        * @example "/path/to/yalcs/web"
@@ -65,7 +62,7 @@ export namespace YALCS {
       SLACK_SIGNING_SECRET: string;
     }
 
-    export interface Web extends YALCS.Env.Common {
+    export interface Web {
       /**
        * Port for the Webpack dev server. Only needed for YALCS developers
        */
@@ -81,10 +78,19 @@ export namespace YALCS {
        */
       FAB_TEXT: string;
       /**
+       * Is this a production environment?
+       */
+      NODE_ENV: 'development' | 'production';
+      /**
        * Chat window title.
        * @example "Send us a message..."
        */
       TITLE_TEXT: string;
+      /**
+       * Base path (for URL) of static files
+       * @example "/static/"
+       */
+      STATIC_PATH: string;
       /**
        * URL for YALCS's API (yalcs-server)
        * @example "https://example.com/api/yalcs"
@@ -102,7 +108,11 @@ export namespace YALCS {
       UNREAD_MESSAGES_FAB_TEXT: string;
     }
 
-    export interface Loader extends YALCS.Env.Common {
+    export interface Loader {
+      /**
+       * Is this a production environment?
+       */
+      NODE_ENV: 'development' | 'production';
       /**
        * Should the floating action button be on the right side?
        */

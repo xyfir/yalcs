@@ -1,6 +1,6 @@
 {
   "name": "yalcs-server",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "dist/app.js",
   "scripts": {
@@ -48,5 +48,13 @@
   "bugs": {
     "url": "https://github.com/Xyfir/yalcs/issues"
   },
-  "homepage": "https://github.com/Xyfir/yalcs#readme"
+  "homepage": "https://github.com/Xyfir/yalcs#readme",
+  "keywords": [
+    "live chat",
+    "chat",
+    "slack",
+    "support",
+    "instant messaging",
+    "messaging"
+  ]
 }

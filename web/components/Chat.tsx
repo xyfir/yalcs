@@ -116,19 +116,24 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     // Load thread
     const thread_ts: Yalcs.Thread['thread_ts'] =
       localStorage.getItem('yalcs.thread_ts') || undefined;
-    if (!thread_ts) return;
-    const opt: Yalcs.GetThreadOptions = { thread_ts };
+    const key: Yalcs.Thread['key'] =
+      localStorage.getItem('yalcs.key') || undefined;
+    if (!thread_ts || !key) return;
+    const opt: Yalcs.GetThreadOptions = { thread_ts, key };
     api
       .get('/thread', { params: opt })
-      .then(res => this.setState({ ...res.data, thread_ts }))
+      .then(res => this.setState({ ...res.data, thread_ts, key }))
       .catch(err => console.error('yalcs load thread error', err));
   }
 
   componentDidUpdate(prevProps, prevState: ChatState) {
-    const { thread_ts, messages, polling, show } = this.state;
+    const { thread_ts, messages, polling, show, key } = this.state;
 
     // Update localStorage from state
-    thread_ts && localStorage.setItem('yalcs.thread_ts', thread_ts);
+    if (thread_ts) {
+      localStorage.setItem('yalcs.thread_ts', thread_ts);
+      localStorage.setItem('yalcs.key', key);
+    }
 
     // Scroll to anchor element (bottom of message list)
     if (show && messages.length) this.anchor.current.scrollIntoView();
@@ -160,8 +165,8 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
 
   onSend() {
     // Send message and push to state if successful
-    const { thread_ts, messages, text } = this.state;
-    const opt: Yalcs.SendMessageOptions = { thread_ts, text };
+    const { thread_ts, text, key } = this.state;
+    const opt: Yalcs.SendMessageOptions = { thread_ts, text, key };
     api.post('/messages', opt).then(res => {
       const thread: Yalcs.Thread = res.data;
       this.setState({ ...thread, text: '' });
@@ -169,14 +174,15 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   poll() {
-    const { thread_ts, messages } = this.state;
+    const { thread_ts, messages, key } = this.state;
     this.setState({ polling: true });
 
     // Keep connection alive until a new message is received
     // Will automatically reconnect on component update if !polling
     const opt: Yalcs.GetMessageOptions = {
       message_ts: messages[messages.length - 1].ts,
-      thread_ts
+      thread_ts,
+      key
     };
     api
       .get('/messages', { params: opt })

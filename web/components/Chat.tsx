@@ -190,7 +190,8 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
       })
       .catch(err => {
         console.error('yalcs polling error', err);
-        this.setState({ polling: false });
+        // Prevent instantly sending thousands of requests
+        setTimeout(() => this.setState({ polling: false }), 60 * 1000);
       });
   }
 

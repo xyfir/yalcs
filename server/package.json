@@ -1,6 +1,6 @@
 {
   "name": "yalcs-server",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "dist/app.js",
   "scripts": {
@@ -38,8 +38,8 @@
     "@types/uuid": "^3.4.4",
     "jest": "^24.5.0",
     "jest-extended": "^0.11.1",
-    "nodemon": "^1.18.10",
-    "typescript": "^3.3.4000"
+    "nodemon": "^1.18.11",
+    "typescript": "^3.4.2"
   },
   "repository": {
     "type": "git",

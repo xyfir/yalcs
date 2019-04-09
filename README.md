@@ -7,12 +7,13 @@ Built and mantained by **[Ptorx](https://ptorx.com)** and other **[Xyfir](https:
 ## Features
 
 - Communicate with visitors who are on your site or app through your Slack workspace
+- Configure which URL routes it will display on
+- Easy theming via [Material-UI](https://material-ui.com/style/color/#color-tool)
 - Standalone server and web client
   - Easy integration into new and existing applications of any stack
   - Self-hosted, with no third-party service subscriptions you have to pay for
 - No dependencies other than Node and what npm will install
   - Older Node versions not actively supported
-- Easy theming via [Material-UI](https://material-ui.com/style/color/#color-tool)
 
 ## Install
 

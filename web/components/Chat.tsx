@@ -113,16 +113,21 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   anchor = React.createRef<HTMLDivElement>();
 
   componentDidMount() {
-    this.setState({
-      thread_ts: localStorage.getItem('yalcs.thread_ts') || undefined
-    });
+    // Load thread
+    const thread_ts: Yalcs.Thread['thread_ts'] =
+      localStorage.getItem('yalcs.thread_ts') || undefined;
+    if (!thread_ts) return;
+    api
+      .get('/thread', { params: { thread_ts } })
+      .then(res => this.setState({ ...res.data, thread_ts }))
+      .catch(err => console.error('yalcs load thread error', err));
   }
 
   componentDidUpdate(prevProps, prevState: ChatState) {
     const { thread_ts, messages, polling, show } = this.state;
 
     // Update localStorage from state
-    localStorage.setItem('yalcs.thread_ts', thread_ts);
+    thread_ts && localStorage.setItem('yalcs.thread_ts', thread_ts);
 
     // Scroll to anchor element (bottom of message list)
     if (show && messages.length) this.anchor.current.scrollIntoView();
@@ -163,21 +168,24 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   }
 
   poll() {
-    const { thread_ts } = this.state;
+    const { thread_ts, messages } = this.state;
     this.setState({ polling: true });
 
     // Keep connection alive until a new message is received
     // Will automatically reconnect on component update if !polling
-    const opt: Yalcs.GetThreadOptions = { thread_ts, longpoll: true };
+    const opt: Yalcs.GetMessageOptions = {
+      message_ts: messages[messages.length - 1].ts,
+      thread_ts
+    };
     api
-      .get('/thread', { params: opt })
+      .get('/messages', { params: opt })
       .then(res => {
         const { messages, show } = this.state;
         this.setState({
-          ...res.data,
+          messages: messages.concat(res.data),
           polling: false,
           // Show alert fab if chat window is closed
-          alert: !show
+          alert: !show && res.data.length
         });
       })
       .catch(err => {

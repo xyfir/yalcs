@@ -1,4 +1,6 @@
 .gitignore
+.vscode/
+loader/
 server/
 .env
 web/

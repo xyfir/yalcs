@@ -17,18 +17,18 @@ export namespace Yalcs {
   }
 
   export interface SendMessageOptions {
-    thread_ts?: string;
+    thread_ts?: Yalcs.Thread['thread_ts'];
     text: string;
     ip?: string;
   }
 
   export interface GetMessageOptions {
-    message_ts: string;
-    thread_ts: string;
+    message_ts: Yalcs.Message['ts'];
+    thread_ts: Yalcs.Thread['thread_ts'];
   }
 
   export interface GetThreadOptions {
-    thread_ts: string;
+    thread_ts: Yalcs.Thread['thread_ts'];
   }
 
   export namespace Env {

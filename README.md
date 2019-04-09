@@ -47,20 +47,20 @@ cd ../ # back to yalcs/
 
 ## Step 2: Create Slack app and bot
 
-1. Go to the [Slack API dashboard](https://api.slack.com/apps?new_app=1).
+1. Go to the [Create a Slack App](https://api.slack.com/apps?new_app=1) form on the Slack API dashboard.
 2. Login to the Slack workspace you wish to add Yalcs to.
 3. Set the app name to Yalcs or whatever you like and select your workspace.
-4. Once viewing your new Slack app, click _Bot Users_, then _Add a bot user_.
-5. Set the name to Yalcs or whatever you'd like and enable its always online status.
-6. Click _Add Bot User_.
-7. Click _OAuth & Permissions_.
-8. Click _Install App_ and authorize its installation to your workspace.
-9. Once again in _OAuth & Permissions_, save your _Bot User OAuth Access Token_ somewhere for later use.
-10. Click _Basic Information_.
-11. Under _App Credentials_, save your _Signing Secret_ somewhere for later use.
-12. In a new tab, navigate to your workspace: `your-workspace.slack.com`.
-13. View the channel or private group you wish to add Yalcs to.
-14. Save the channel's id from the url somewhere for later use. (For example, in `https://your-workspace.slack.com/messages/GHG8G3WH2/`, the id is `GHG8G3WH2`)
+4. Once viewing your new Slack app, go to _Bot Users_ and click _Add a bot user_.
+5. Set the name to Yalcs or whatever you'd like then enable its always online status and click _Add Bot User_.
+6. Go to _OAuth & Permissions_.
+7. Click _Install App_ and _Authorize_ its installation to your workspace.
+8. Save your _Bot User OAuth Access Token_ somewhere for later use.
+9. Go to _Basic Information_.
+10. Under _App Credentials_, save your _Signing Secret_ somewhere for later use.
+11. In a new tab, navigate to your workspace: `your-workspace.slack.com`.
+12. Navigate to the channel or private group you wish to add Yalcs to.
+13. Save the channel's id from the url somewhere for later use. (For example, in `https://your-workspace.slack.com/messages/GHG8G3WH2/`, the id is `GHG8G3WH2`)
+14. Invite the Yalcs bot to your channel.
 
 Keep the Slack API dashboard open, we'll return to it again later.
 

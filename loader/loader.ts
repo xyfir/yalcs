@@ -28,13 +28,27 @@ function createIframe(): void {
 }
 
 /**
- * Determine if the iframe should be inserted on the current route.
+ * Called on URL change to determine if we should add or remove iframe.
  */
-function isRouteAllowed(): boolean {
+function onRouteChange(): void {
+  // Determine if the iframe should be inserted on the current route
+  let allowed = false;
   for (let route of process.enve.ROUTES) {
-    if (new RegExp(route).test(location.href)) return true;
+    if (new RegExp(route).test(location.href)) {
+      allowed = true;
+      break;
+    }
   }
-  return false;
+
+  // Insert iframe if allowed and not already inserted
+  if (allowed && !iframe) {
+    createIframe();
+  }
+  // Remove iframe if not allowed and currently inserted
+  else if (!allowed && iframe) {
+    iframe.remove();
+    iframe = null;
+  }
 }
 
 // Listen for changes to the web app's `state.show` value so we can change
@@ -64,19 +78,17 @@ window.addEventListener('message', event => {
 });
 
 // Listen for URL changes so we can add or remove iframe
-window.addEventListener('popstate', () => {
-  const allowed = isRouteAllowed();
+window.addEventListener('popstate', onRouteChange);
 
-  // Insert iframe if allowed and not already inserted
-  if (allowed && !iframe) {
-    createIframe();
-  }
-  // Remove iframe if not allowed and currently inserted
-  else if (!allowed && iframe) {
-    iframe.remove();
-    iframe = null;
-  }
-});
+// These don't trigger popstate events so we need to replace them
+const { replaceState, pushState } = window.history;
+window.history.replaceState = function() {
+  replaceState.call(window.history, ...arguments);
+  onRouteChange();
+};
+window.history.pushState = function() {
+  pushState.call(window.history, ...arguments);
+  onRouteChange();
+};
 
-// Create iframe if needed
-if (isRouteAllowed()) createIframe();
+onRouteChange();

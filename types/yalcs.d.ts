@@ -136,6 +136,19 @@ export namespace Yalcs {
 
     export interface Loader {
       /**
+       * Array of regular expressions for URL routes on your app where Yalcs
+       *  will display its floating action button. Expressions are checked
+       *  against the full URL (host and all) of the page the loader is
+       *  imported into. Expressions are case sensitive!
+       * @example
+       *  // Show where /support#contact or /sales?contact=1 are in the URL
+       *  ["\/support#contact","\/sales\?contact=1"]
+       * @example
+       *  // Show everywhere
+       *  ["."]
+       */
+      ROUTES: string[];
+      /**
        * Is this a production environment?
        */
       NODE_ENV: 'development' | 'production';

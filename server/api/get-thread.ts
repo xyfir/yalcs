@@ -6,8 +6,7 @@ export function api_getThread(
   res: Response,
   next: NextFunction
 ): void {
-  req.setTimeout(60 * 60 * 1000, () => null);
-  getThread(req.query)
+  getThread(req.query.thread_ts)
     .then(thread => res.status(200).json(thread))
     .catch(next);
 }

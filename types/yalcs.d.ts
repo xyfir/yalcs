@@ -21,9 +21,9 @@ export namespace Yalcs {
     ip?: string;
   }
 
-  export interface GetThreadOptions {
+  export interface GetMessageOptions {
+    message_ts: string;
     thread_ts: string;
-    longpoll: boolean;
   }
 
   export namespace Env {

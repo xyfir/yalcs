@@ -5,4 +5,5 @@ export const router = Router();
 
 router.post('/slack', c.api_slackListener);
 router.get('/thread', c.api_getThread);
+router.get('/messages', c.api_getMessages);
 router.post('/messages', c.api_sendMessages);

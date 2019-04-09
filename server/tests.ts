@@ -4,10 +4,11 @@ import 'enve';
 
 import { verifySlackRequest } from 'lib/verify-slack-request';
 import { slackListener } from 'lib/slack-listener';
-import { ThreadStore } from 'lib/ThreadStore';
 import { sendMessage } from 'lib/send-message';
-import { getThread } from 'lib/get-thread';
+import { getMessages } from 'lib/get-messages';
+import { ThreadStore } from 'lib/ThreadStore';
 import { createHmac } from 'crypto';
+import { getThread } from 'lib/get-thread';
 import { Yalcs } from 'types/yalcs';
 import 'jest-extended';
 
@@ -97,15 +98,7 @@ test('getThread', async () => {
   };
 
   await ThreadStore.save(_thread);
-  let thread = await getThread({
-    thread_ts: _thread.thread_ts,
-    longpoll: false
-  });
-  expect(thread).toMatchObject(_thread);
-
-  const promise = getThread({ thread_ts: _thread.thread_ts, longpoll: true });
-  await ThreadStore.save(_thread);
-  thread = await promise;
+  let thread = await getThread(_thread.thread_ts);
   expect(thread).toMatchObject(_thread);
 });
 
@@ -125,4 +118,27 @@ test('sendMessage', async () => {
   expect(updatedThread.thread_ts).toBe(newThread.thread_ts);
   expect(updatedThread.messages[0].text).toMatch(/^\d{13}$/);
   expect(updatedThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
+});
+
+test.only('getMessages', async () => {
+  expect.assertions(2);
+
+  const thread_ts = (Date.now() / 1000).toString();
+  const _thread: Yalcs.Thread = {
+    thread_ts,
+    messages: [{ text: 'test', ts: '2345.6789' }]
+  };
+  await ThreadStore.save(_thread);
+
+  _thread.messages.push({ text: 'test 2', ts: '2345.6799' });
+
+  await ThreadStore.save(_thread);
+  const promise = getMessages({
+    message_ts: _thread.messages[0].ts,
+    thread_ts
+  });
+  const messages = await promise;
+
+  expect(messages).toBeArrayOfSize(1);
+  expect(messages[0]).toMatchObject(_thread.messages[1]);
 });

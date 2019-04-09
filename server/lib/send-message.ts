@@ -1,15 +1,23 @@
 import { ThreadStore } from 'lib/ThreadStore';
 import * as request from 'request-promise-native';
 import { Yalcs } from 'types/yalcs';
+import * as uuid from 'uuid/v4';
 
 export async function sendMessage({
   thread_ts,
   text,
+  key,
   ip
 }: Yalcs.SendMessageOptions): Promise<Yalcs.Thread> {
   try {
-    // Create first message which will start thread
-    if (!thread_ts) {
+    let thread: Yalcs.Thread;
+
+    // Get full thread from disk
+    if (thread_ts) {
+      thread = await ThreadStore.read(thread_ts, key);
+    }
+    // Create new thread
+    else {
       const res = await request.post('https://slack.com/api/chat.postMessage', {
         auth: { bearer: process.enve.SLACK_BOT_TOKEN },
         json: {
@@ -17,33 +25,19 @@ export async function sendMessage({
           text: ip
         }
       });
-      thread_ts = res.message.ts;
+      thread = { thread_ts: res.message.ts, messages: [], key: uuid() };
     }
 
     // Add message to thread
     const res = await request.post('https://slack.com/api/chat.postMessage', {
       auth: { bearer: process.enve.SLACK_BOT_TOKEN },
       json: {
-        thread_ts,
+        thread_ts: thread.thread_ts,
         channel: process.enve.SLACK_CHANNEL,
         text
       }
     });
-
-    // Get full thread from disk
-    let thread: Yalcs.Thread = await ThreadStore.read(thread_ts);
-
-    // Create new thread
-    if (!thread) {
-      thread = {
-        thread_ts,
-        messages: [{ outgoing: true, text, ts: res.message.ts }]
-      };
-    }
-    // Add message to existing thread
-    else {
-      thread.messages.push({ outgoing: true, text, ts: res.message.ts });
-    }
+    thread.messages.push({ outgoing: true, text, ts: res.message.ts });
 
     // Write thread to disk
     await ThreadStore.save(thread);

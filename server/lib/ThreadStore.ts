@@ -17,6 +17,14 @@ export class ThreadStore {
   }
 
   static async save(thread: Yalcs.Thread): Promise<void> {
+    // Validate thread and key
+    try {
+      await ThreadStore.read(thread.thread_ts, thread.key);
+    } catch (err) {
+      // If thread doesn't exist, that's okay; anything else, throw error
+      if (!/Thread does not exist/.test(err)) throw err;
+    }
+
     // Send to listener
     if (this.listeners[thread.thread_ts] !== undefined) {
       this.listeners[thread.thread_ts](thread);
@@ -27,7 +35,17 @@ export class ThreadStore {
     await storage.setItem(`thread-${thread.thread_ts}`, thread);
   }
 
-  static async read(thread_ts: string): Promise<Yalcs.Thread> {
-    return await storage.getItem(`thread-${thread_ts}`);
+  static async read(
+    thread_ts: Yalcs.Thread['thread_ts'],
+    key: Yalcs.Thread['key']
+  ): Promise<Yalcs.Thread> {
+    const thread: Yalcs.Thread = await storage.getItem(`thread-${thread_ts}`);
+    if (!thread) throw 'Thread does not exist';
+
+    // Allow using Slack secret for Slack events where we don't have the key
+    if (key != thread.key && key != process.enve.SLACK_SIGNING_SECRET)
+      throw 'Cannot access thread';
+
+    return thread;
   }
 }

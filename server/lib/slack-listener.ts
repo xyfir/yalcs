@@ -28,7 +28,10 @@ export async function slackListener(
   if (data.event.subtype == 'bot_message') return;
 
   // Load thread
-  const thread = await ThreadStore.read(data.event.thread_ts);
+  const thread = await ThreadStore.read(
+    data.event.thread_ts,
+    process.enve.SLACK_SIGNING_SECRET
+  );
 
   // Add message to thread
   thread.messages.push({ text: data.event.text, ts: data.event.ts });

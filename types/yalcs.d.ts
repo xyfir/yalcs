@@ -19,16 +19,22 @@ export namespace Yalcs {
   export interface SendMessageOptions {
     thread_ts?: Yalcs.Thread['thread_ts'];
     text: string;
+    key?: Yalcs.Thread['key'];
     ip?: string;
   }
 
   export interface GetMessageOptions {
+    /**
+     * Return all messages _after_ this one.
+     */
     message_ts: Yalcs.Message['ts'];
     thread_ts: Yalcs.Thread['thread_ts'];
+    key?: Yalcs.Thread['key'];
   }
 
   export interface GetThreadOptions {
     thread_ts: Yalcs.Thread['thread_ts'];
+    key?: Yalcs.Thread['key'];
   }
 
   export namespace Env {

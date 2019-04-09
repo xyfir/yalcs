@@ -10,14 +10,19 @@ import { ThreadStore } from 'lib/ThreadStore';
 import { createHmac } from 'crypto';
 import { getThread } from 'lib/get-thread';
 import { Yalcs } from 'types/yalcs';
+import * as uuid from 'uuid/v4';
 import 'jest-extended';
 
+let nonce = 0;
+const timestamp = () => (Date.now() / 1000).toFixed(4) + nonce++;
+
 test('ThreadStore', async () => {
-  expect.assertions(2);
+  expect.assertions(4);
 
   const _thread: Yalcs.Thread = {
-    thread_ts: '1234.5678',
-    messages: [{ text: 'test', ts: '2345.6789' }]
+    thread_ts: timestamp(),
+    messages: [{ text: 'test', ts: timestamp() }],
+    key: uuid()
   };
 
   const promise = new Promise(resolve =>
@@ -32,8 +37,13 @@ test('ThreadStore', async () => {
   _thread.messages = _thread.messages.concat(_thread.messages[0]);
   await ThreadStore.save(_thread);
 
-  const thread = await ThreadStore.read(_thread.thread_ts);
+  const thread = await ThreadStore.read(_thread.thread_ts, _thread.key);
   expect(thread).toMatchObject(_thread);
+
+  await expect(ThreadStore.read(_thread.thread_ts, '')).toReject();
+  await expect(
+    ThreadStore.read(_thread.thread_ts, process.enve.SLACK_SIGNING_SECRET)
+  ).toResolve();
 });
 
 test('verifySlackRequest', () => {
@@ -61,12 +71,9 @@ test('slackListener challenge', () => {
 test('slackListener message', async () => {
   expect.assertions(1);
 
-  const thread_ts = '1234.56789';
-  const _message: Yalcs.Message = {
-    text: 'test',
-    ts: '2345.6789'
-  };
-  const _thread: Yalcs.Thread = { thread_ts, messages: [] };
+  const thread_ts = timestamp();
+  const _message: Yalcs.Message = { text: 'test', ts: timestamp() };
+  const _thread: Yalcs.Thread = { thread_ts, messages: [], key: uuid() };
 
   await ThreadStore.save(_thread);
   _thread.messages.push(_message);
@@ -87,18 +94,22 @@ test('slackListener message', async () => {
   hmac.update(`v0:${date}:${JSON.stringify(data)}`);
 
   await slackListener(data, `v0=${hmac.digest('hex')}`, date);
-  const thread = await ThreadStore.read(thread_ts);
+  const thread = await ThreadStore.read(thread_ts, _thread.key);
   expect(thread).toMatchObject(_thread);
 });
 
 test('getThread', async () => {
   const _thread: Yalcs.Thread = {
-    thread_ts: '1234.5678',
-    messages: [{ text: 'test', ts: '2345.6789' }]
+    thread_ts: timestamp(),
+    messages: [{ text: 'test', ts: timestamp() }],
+    key: uuid()
   };
 
   await ThreadStore.save(_thread);
-  let thread = await getThread({ thread_ts: _thread.thread_ts });
+  let thread = await getThread({
+    thread_ts: _thread.thread_ts,
+    key: _thread.key
+  });
   expect(thread).toMatchObject(_thread);
 });
 
@@ -110,6 +121,7 @@ test('sendMessage', async () => {
   const updatedThread = await sendMessage({
     thread_ts: newThread.thread_ts,
     text: Date.now().toString(),
+    key: newThread.key,
     ip: '::1'
   });
   expect(newThread.thread_ts).toMatch(/^\d+\.\d+$/);
@@ -123,14 +135,14 @@ test('sendMessage', async () => {
 test('getMessages', async () => {
   expect.assertions(2);
 
-  const thread_ts = (Date.now() / 1000).toString();
+  const thread_ts = timestamp();
   const _thread: Yalcs.Thread = {
     thread_ts,
-    messages: [{ text: 'test', ts: '2345.6789' }]
+    messages: [{ text: 'test', ts: timestamp() }]
   };
   await ThreadStore.save(_thread);
 
-  _thread.messages.push({ text: 'test 2', ts: '2345.6799' });
+  _thread.messages.push({ text: 'test 2', ts: timestamp() });
 
   const promise = getMessages({
     message_ts: _thread.messages[0].ts,

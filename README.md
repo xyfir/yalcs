@@ -2,6 +2,8 @@
 
 Message your website's visitors through Slack for support or sales. 100% free and open source.
 
+Built and mantained by **[Ptorx](https://ptorx.com)** and other **[Xyfir](https://www.xyfir.com)** projects.
+
 ## Features
 
 - Communicate with visitors who are on your site or app through your Slack workspace

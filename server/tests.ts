@@ -120,7 +120,7 @@ test('sendMessage', async () => {
   expect(updatedThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
 });
 
-test.only('getMessages', async () => {
+test('getMessages', async () => {
   expect.assertions(2);
 
   const thread_ts = (Date.now() / 1000).toString();
@@ -132,11 +132,12 @@ test.only('getMessages', async () => {
 
   _thread.messages.push({ text: 'test 2', ts: '2345.6799' });
 
-  await ThreadStore.save(_thread);
   const promise = getMessages({
     message_ts: _thread.messages[0].ts,
     thread_ts
   });
+  await new Promise(r => setTimeout(r, 500));
+  await ThreadStore.save(_thread);
   const messages = await promise;
 
   expect(messages).toBeArrayOfSize(1);

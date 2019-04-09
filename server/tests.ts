@@ -98,7 +98,7 @@ test('getThread', async () => {
   };
 
   await ThreadStore.save(_thread);
-  let thread = await getThread(_thread.thread_ts);
+  let thread = await getThread({ thread_ts: _thread.thread_ts });
   expect(thread).toMatchObject(_thread);
 });
 

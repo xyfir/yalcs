@@ -117,8 +117,9 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const thread_ts: Yalcs.Thread['thread_ts'] =
       localStorage.getItem('yalcs.thread_ts') || undefined;
     if (!thread_ts) return;
+    const opt: Yalcs.GetThreadOptions = { thread_ts };
     api
-      .get('/thread', { params: { thread_ts } })
+      .get('/thread', { params: opt })
       .then(res => this.setState({ ...res.data, thread_ts }))
       .catch(err => console.error('yalcs load thread error', err));
   }

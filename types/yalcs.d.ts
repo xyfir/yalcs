@@ -8,6 +8,7 @@ export namespace Yalcs {
   export interface Thread {
     thread_ts?: string;
     messages?: Yalcs.Message[];
+    key?: string;
   }
 
   export interface EventData {
@@ -23,6 +24,10 @@ export namespace Yalcs {
 
   export interface GetMessageOptions {
     message_ts: string;
+    thread_ts: string;
+  }
+
+  export interface GetThreadOptions {
     thread_ts: string;
   }
 

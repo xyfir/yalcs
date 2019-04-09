@@ -6,7 +6,7 @@ export function api_getThread(
   res: Response,
   next: NextFunction
 ): void {
-  getThread(req.query.thread_ts)
+  getThread(req.query)
     .then(thread => res.status(200).json(thread))
     .catch(next);
 }

@@ -16,7 +16,10 @@ export class ThreadStore {
     if (!this.listeners[thread_ts]) this.listeners[thread_ts] = listener;
   }
 
-  static async save(thread: Yalcs.Thread): Promise<void> {
+  static async save(
+    thread: Yalcs.Thread,
+    notify: boolean = false
+  ): Promise<void> {
     // Validate thread and key
     try {
       await ThreadStore.read(thread.thread_ts, thread.key);
@@ -26,7 +29,7 @@ export class ThreadStore {
     }
 
     // Send to listener
-    if (this.listeners[thread.thread_ts] !== undefined) {
+    if (notify && this.listeners[thread.thread_ts] !== undefined) {
       this.listeners[thread.thread_ts](thread);
       delete this.listeners[thread.thread_ts];
     }

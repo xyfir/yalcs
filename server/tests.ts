@@ -31,7 +31,7 @@ test('ThreadStore', async () => {
       resolve();
     })
   );
-  await ThreadStore.save(_thread);
+  await ThreadStore.save(_thread, true);
   await promise;
 
   _thread.messages = _thread.messages.concat(_thread.messages[0]);
@@ -149,7 +149,7 @@ test('getMessages', async () => {
     thread_ts
   });
   await new Promise(r => setTimeout(r, 500));
-  await ThreadStore.save(_thread);
+  await ThreadStore.save(_thread, true);
   const messages = await promise;
 
   expect(messages).toBeArrayOfSize(1);

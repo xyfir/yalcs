@@ -37,5 +37,5 @@ export async function slackListener(
   thread.messages.push({ text: data.event.text, ts: data.event.ts });
 
   // Save message to disk and optionally notify subscriber
-  await ThreadStore.save(thread);
+  await ThreadStore.save(thread, true);
 }

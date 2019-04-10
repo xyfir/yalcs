@@ -2,18 +2,21 @@
 
 Message your website's visitors through Slack for support or sales. 100% free and open source.
 
+![](https://i.imgur.com/lIE8nM8.png)
+
+Yalcs displays a configurable floating action button over your page that when activated opens a chat window connecting your visitors with an agent responding from your specified Slack channel.
+
 Built and mantained by **[Ptorx](https://ptorx.com)** and other **[Xyfir](https://www.xyfir.com)** projects.
 
 ## Features
 
 - Communicate with visitors who are on your site or app through your Slack workspace
-- Configure which URL routes it will display on
-- Easy theming via [Material-UI](https://material-ui.com/style/color/#color-tool)
-- Standalone server and web client
-  - Easy integration into new and existing applications of any stack
-  - Self-hosted, with no third-party service subscriptions you have to pay for
+- Configurable routes to display and hide Yalcs on certain pages
+- Configurable theme to match your app's design
+- Configurable text for titles, buttons, etc
+- Works well on desktop and mobile devices
+- Standalone server and web client that integrates into applications of any stack
 - No dependencies other than Node and what npm will install
-  - Older Node versions not actively supported
 
 ## Install
 
@@ -119,10 +122,10 @@ Let's return to the Slack API dashboard again.
 
 ## Step 7: Add Yalcs to your app
 
-Now all that's left is to add the Yalcs loader to one of your page's HTML. Wherever you'd like it to run, add the following to the bottom of `<body>`:
+Now all that's left is to add the Yalcs loader to one of your page's HTML:
 
 ```html
-<script src="/yalcs/static/yalcs-loader.js"></script>
+<script src="/yalcs/static/yalcs-loader.js" async></script>
 ```
 
 Note that the source is fully dependent on where your app is serving the Yalcs web client files from and the URL of the page(s) where you're importing the loader. It should generally be a URL that combines `YALCS_WEB_URL` with `STATIC_PATH` and `"yalcs-loader.js"`.

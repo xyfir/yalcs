@@ -2,7 +2,7 @@
 
 Message your website's visitors through Slack for support or sales. 100% free and open source.
 
-![](https://i.imgur.com/lIE8nM8.png)
+![](https://i.imgur.com/AYgLDXx.png)
 
 Yalcs displays a configurable floating action button over your page that when activated opens a chat window connecting your visitors with an agent responding from your specified Slack channel.
 

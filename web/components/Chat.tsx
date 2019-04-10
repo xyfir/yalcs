@@ -77,7 +77,6 @@ const styles = (theme: Theme) =>
       flex: 1
     },
     chat: {
-      transition: '0.5s',
       flexDirection: 'column',
       display: 'flex',
       // Expand to iframe container's size
@@ -89,7 +88,6 @@ const styles = (theme: Theme) =>
       transition: '0.5s',
       position: 'fixed',
       bottom: '0',
-      zIndex: -1,
       margin: theme.spacing.unit * 2,
       right: process.enve.FAB_ON_RIGHT ? '0' : ''
     }

@@ -1,6 +1,6 @@
 {
   "name": "yalcs-loader",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "",
   "scripts": {
@@ -23,7 +23,7 @@
     "babel-loader": "^8.0.5",
     "compression-webpack-plugin": "^2.0.0",
     "typescript": "^3.4.3",
-    "webpack": "^4.29.6",
+    "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.1"
   },

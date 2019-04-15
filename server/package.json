@@ -1,6 +1,6 @@
 {
   "name": "yalcs-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "dist/app.js",
   "scripts": {

@@ -51,10 +51,15 @@ const styles = (theme: Theme) =>
       margin: theme.spacing.unit
     },
     noMessages: {
-      display: 'flex',
-      alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column',
+      alignItems: 'center',
+      display: 'flex',
       flex: 1
+    },
+    poweredBy: {
+      fontWeight: 'bold',
+      opacity: 0.3
     },
     hiddenFab: {
       transform: 'translate(0, 150%)'
@@ -83,6 +88,11 @@ const styles = (theme: Theme) =>
       margin: theme.spacing.unit,
       height: `calc(100vh - ${theme.spacing.unit * 2}px)`,
       width: `calc(100vw - ${theme.spacing.unit * 2}px)`
+    },
+    link: {
+      textDecoration: 'none',
+      cursor: 'pointer',
+      color: theme.palette.primary.main
     },
     fab: {
       transition: '0.5s',
@@ -144,6 +154,11 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
       const event: Yalcs.EventData = { yalcs: true, show };
       window.parent.postMessage(event, '*');
     }
+  }
+
+  onClickLink(link: string) {
+    const event: Yalcs.EventData = { yalcs: true, link };
+    window.parent.postMessage(event, '*');
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
@@ -251,6 +266,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
             ) : (
               <div className={classes.noMessages}>
                 <ChatOutlinedIcon className={classes.chatOutline} />
+                <Typography className={classes.poweredBy}>
+                  Chat powered by{' '}
+                  <a
+                    onClick={() =>
+                      this.onClickLink('https://github.com/Xyfir/yalcs')
+                    }
+                    className={classes.link}
+                  >
+                    Yalcs
+                  </a>
+                </Typography>
               </div>
             )}
 

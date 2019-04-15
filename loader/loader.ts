@@ -51,11 +51,15 @@ function onRouteChange(): void {
   }
 }
 
-// Listen for changes to the web app's `state.show` value so we can change
-// the iframe's size accordingly
 window.addEventListener('message', event => {
-  const { yalcs, show } = event.data as Yalcs.EventData;
+  const { yalcs, show, link } = event.data as Yalcs.EventData;
   if (!yalcs || !iframe) return;
+
+  // Open link from iframe in a new tab
+  if (link) return window.open(link);
+
+  // Listen for changes to the web app's `state.show` value so we can change
+  // the iframe's size accordingly
 
   // Display chat window
   if (show) {

@@ -13,7 +13,8 @@ export namespace Yalcs {
 
   export interface EventData {
     yalcs: true;
-    show: boolean;
+    show?: boolean;
+    link?: string;
   }
 
   export interface SendMessageOptions {

@@ -93,6 +93,9 @@ export namespace Yalcs {
       /**
        * Passed to Material-UI's `createMUITheme()`. Can be left an empty object
        * https://material-ui.com/style/color/#color-tool
+       * @example
+       * {"palette":{"type":"light","primary":{"main":"#6a1b9a"},"secondary":{"main":"#3f51b5"}}}
+       * // For dark theme set `type` to "dark".
        */
       THEME: any;
       /**

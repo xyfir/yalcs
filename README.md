@@ -72,7 +72,7 @@ Keep the Slack API dashboard open, we'll return to it again later.
 
 The Yalcs modules are configured via environment variables which are loaded into the applications via `.env` files located in each module's directory.
 
-To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/dotenv).
+To understand the syntax of the `.env` files, know that they are first loaded via [dotenv](https://www.npmjs.com/package/dotenv) and then the string values provided by dotenv are parsed by [enve](https://www.npmjs.com/package/enve).
 
 ### Step 3a: Create `.env` files
 

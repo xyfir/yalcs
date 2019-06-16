@@ -48,7 +48,7 @@ const styles = (theme: Theme) =>
     sendMessage: {
       alignItems: 'center',
       display: 'flex',
-      margin: theme.spacing.unit
+      margin: theme.spacing()
     },
     noMessages: {
       justifyContent: 'center',
@@ -69,7 +69,7 @@ const styles = (theme: Theme) =>
       flex: 1
     },
     fabIcon: {
-      marginRight: theme.spacing.unit
+      marginRight: theme.spacing()
     },
     textarea: {
       overflowY: 'hidden'
@@ -85,9 +85,9 @@ const styles = (theme: Theme) =>
       flexDirection: 'column',
       display: 'flex',
       // Expand to iframe container's size
-      margin: theme.spacing.unit,
-      height: `calc(100vh - ${theme.spacing.unit * 2}px)`,
-      width: `calc(100vw - ${theme.spacing.unit * 2}px)`
+      margin: theme.spacing(),
+      height: `calc(100vh - ${theme.spacing(2)}px)`,
+      width: `calc(100vw - ${theme.spacing(2)}px)`
     },
     link: {
       textDecoration: 'none',
@@ -98,7 +98,7 @@ const styles = (theme: Theme) =>
       transition: '0.5s',
       position: 'fixed',
       bottom: '0',
-      margin: theme.spacing.unit * 2,
+      margin: theme.spacing(2),
       right: process.enve.FAB_ON_RIGHT ? '0' : ''
     }
   });

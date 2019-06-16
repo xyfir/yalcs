@@ -1,19 +1,16 @@
+import { createMuiTheme, CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
 import * as React from 'react';
 import { Chat } from 'components/Chat';
 import { hot } from 'react-hot-loader/root';
-import {
-  MuiThemeProvider,
-  createMuiTheme,
-  CssBaseline
-} from '@material-ui/core';
 
 const theme = createMuiTheme(process.enve.THEME);
 
 const _App = () => (
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <CssBaseline />
     <Chat />
-  </MuiThemeProvider>
+  </ThemeProvider>
 );
 
 export const App = hot(_App);

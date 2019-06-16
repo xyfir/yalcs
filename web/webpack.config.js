@@ -1,6 +1,6 @@
 require('dotenv').config();
 require('enve');
-
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -15,7 +15,7 @@ module.exports = {
 
   output: {
     publicPath: process.enve.STATIC_PATH,
-    filename: PROD ? '[name].[hash].js' : '[name].js',
+    filename: '[name].[hash].js',
     pathinfo: false,
     path: path.resolve(__dirname, 'dist')
   },
@@ -78,25 +78,29 @@ module.exports = {
         return o;
       }, {})
     }),
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ['**/*', '!yalcs-loader.js']
+    }),
     new HtmlWebpackPlugin({ template: 'template.html', minify: PROD }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,
     PROD ? null : new webpack.HotModuleReplacementPlugin()
   ].filter(p => p !== null),
 
-  devtool: 'inline-source-map',
-
-  watchOptions: {
-    aggregateTimeout: 500,
-    ignored: ['node_modules', 'dist']
-  },
+  devtool: PROD ? false : 'inline-source-map',
 
   devServer: {
     historyApiFallback: true,
     /** @todo remove this eventually */
     disableHostCheck: true,
     contentBase: [path.join(__dirname, 'dist'), __dirname],
+    writeToDisk: true,
     port: process.enve.PORT,
     host: '0.0.0.0',
     hot: true
+  },
+
+  watchOptions: {
+    aggregateTimeout: 500,
+    ignored: ['node_modules', 'dist']
   }
 };

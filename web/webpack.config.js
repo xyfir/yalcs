@@ -79,7 +79,8 @@ module.exports = {
       }, {})
     }),
     new CleanWebpackPlugin({
-      cleanAfterEveryBuildPatterns: ['**/*', '!yalcs-loader.js']
+      cleanAfterEveryBuildPatterns: ['**/*', '!yalcs-loader.js'],
+      cleanOnceBeforeBuildPatterns: ['**/*', '!yalcs-loader.js']
     }),
     new HtmlWebpackPlugin({ template: 'template.html', minify: PROD }),
     PROD ? new CompressionPlugin({ filename: '[path].gz' }) : null,

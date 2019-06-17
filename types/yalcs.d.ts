@@ -100,7 +100,7 @@ export namespace Yalcs {
       THEME: any;
       /**
        * Floating Action Button text.
-       * @example "Have a question?"
+       * @example "Got a question?"
        */
       FAB_TEXT: string;
       /**

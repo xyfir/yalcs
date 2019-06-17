@@ -1,6 +1,6 @@
 {
   "name": "yalcs-loader",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "",
   "scripts": {
@@ -12,20 +12,21 @@
     "singleQuote": true
   },
   "dependencies": {
-    "dotenv": "^7.0.0",
-    "enve": "^1.0.1"
+    "enve": "^1.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-typescript": "^7.3.3",
     "@types/dotenv": "^6.1.0",
-    "babel-loader": "^8.0.5",
-    "compression-webpack-plugin": "^2.0.0",
-    "typescript": "^3.4.3",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.3.1"
+    "@types/webpack": "^4.4.32",
+    "babel-loader": "^8.0.6",
+    "compression-webpack-plugin": "^3.0.0",
+    "dotenv": "^8.0.0",
+    "typescript": "^3.5.2",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.1"
   },
   "keywords": [
     "live chat",

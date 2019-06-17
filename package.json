@@ -1,15 +1,15 @@
 {
   "name": "yalcs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "yalcs-loader": "^1.0.0",
-    "yalcs-server": "^1.0.0",
-    "yalcs-web": "^1.0.0"
+    "yalcs-loader": "^1.1.1",
+    "yalcs-server": "^1.1.1",
+    "yalcs-web": "^1.1.1"
   },
   "prettier": {
     "singleQuote": true

@@ -104,13 +104,16 @@ const styles = (theme: Theme) =>
   });
 
 interface ChatState extends Yalcs.Thread {
+  messages: Yalcs.Message[];
   polling: boolean;
   alert: boolean;
   show: boolean;
   text: string;
 }
 
-class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
+type ChatProps = WithStyles<typeof styles>;
+
+class _Chat extends React.Component<ChatProps, ChatState> {
   state: ChatState = {
     messages: [],
     polling: false,
@@ -134,17 +137,17 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
       .catch(err => console.error('yalcs load thread error', err));
   }
 
-  componentDidUpdate(prevProps, prevState: ChatState) {
+  componentDidUpdate(prevProps: ChatProps, prevState: ChatState) {
     const { thread_ts, messages, polling, show, key } = this.state;
 
     // Update localStorage from state
     if (thread_ts) {
       localStorage.setItem('yalcs.thread_ts', thread_ts);
-      localStorage.setItem('yalcs.key', key);
+      localStorage.setItem('yalcs.key', key!);
     }
 
     // Scroll to anchor element (bottom of message list)
-    if (show && messages.length) this.anchor.current.scrollIntoView();
+    if (show && messages.length) this.anchor.current!.scrollIntoView();
 
     // Begin polling for new messages
     if (thread_ts && !polling) this.poll();
@@ -182,7 +185,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
     const opt: Yalcs.SendMessageOptions = { thread_ts, text, key };
     api.post('/messages', opt).then(res => {
       const thread: Yalcs.Thread = res.data;
-      this.setState({ ...thread, text: '' });
+      this.setState({ ...thread, messages: thread.messages!, text: '' });
     });
   }
 

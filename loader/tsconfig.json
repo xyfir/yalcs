@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
+    "strict": true,
     "baseUrl": "./",
     "rootDir": "./",
     "newLine": "LF",

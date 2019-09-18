@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-let iframe: HTMLIFrameElement;
+let iframe: HTMLIFrameElement | undefined;
 
 /**
  * Create a 'closed' iframe (showing fab instead of chat window).
@@ -47,7 +47,7 @@ function onRouteChange(): void {
   // Remove iframe if not allowed and currently inserted
   else if (!allowed && iframe) {
     iframe.remove();
-    iframe = null;
+    iframe = undefined;
   }
 }
 
@@ -87,10 +87,12 @@ window.addEventListener('popstate', onRouteChange);
 // These don't trigger popstate events so we need to replace them
 const { replaceState, pushState } = window.history;
 window.history.replaceState = function() {
+  // @ts-ignore
   replaceState.call(window.history, ...arguments);
   onRouteChange();
 };
 window.history.pushState = function() {
+  // @ts-ignore
   pushState.call(window.history, ...arguments);
   onRouteChange();
 };

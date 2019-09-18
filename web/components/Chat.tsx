@@ -218,6 +218,12 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
   render() {
     const { messages, alert, show, text } = this.state;
     const { classes } = this.props;
+    const {
+      UNREAD_MESSAGES_FAB_TEXT,
+      MESSAGE_PLACEHOLDER_TEXT,
+      TITLE_TEXT,
+      FAB_TEXT
+    } = process.enve;
     return (
       <React.Fragment>
         {show ? (
@@ -234,7 +240,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
                   variant="h6"
                   className={classes.title}
                 >
-                  {process.enve.TITLE_TEXT}
+                  {TITLE_TEXT}
                 </Typography>
                 <IconButton
                   color="inherit"
@@ -293,7 +299,7 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
                 fullWidth
                 multiline
                 onKeyDown={e => this.onKeyDown(e)}
-                placeholder={process.enve.MESSAGE_PLACEHOLDER_TEXT}
+                placeholder={MESSAGE_PLACEHOLDER_TEXT}
                 InputProps={{ classes: { inputMultiline: classes.textarea } }}
               />
               <IconButton
@@ -311,23 +317,23 @@ class _Chat extends React.Component<WithStyles<typeof styles>, ChatState> {
           <Fab
             color="secondary"
             onClick={() => this.onOpen()}
-            variant="extended"
+            variant={UNREAD_MESSAGES_FAB_TEXT ? 'extended' : 'round'}
             className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
-            aria-label={process.enve.UNREAD_MESSAGES_FAB_TEXT}
+            aria-label={UNREAD_MESSAGES_FAB_TEXT}
           >
             <NotificationImportantIcon className={classes.fabIcon} />
-            {process.enve.UNREAD_MESSAGES_FAB_TEXT}
+            {UNREAD_MESSAGES_FAB_TEXT}
           </Fab>
         ) : (
           <Fab
             color="secondary"
             onClick={() => this.onOpen()}
-            variant="extended"
+            variant={FAB_TEXT ? 'extended' : 'round'}
             className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
-            aria-label={process.enve.FAB_TEXT}
+            aria-label={FAB_TEXT}
           >
             <ChatIcon className={classes.fabIcon} />
-            {process.enve.FAB_TEXT}
+            {FAB_TEXT}
           </Fab>
         )}
       </React.Fragment>

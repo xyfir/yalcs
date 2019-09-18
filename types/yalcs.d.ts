@@ -99,14 +99,14 @@ export namespace Yalcs {
        */
       THEME: any;
       /**
-       * Floating Action Button text.
-       * @example "Got a question?"
-       */
-      FAB_TEXT: string;
-      /**
        * Is this a production environment?
        */
       NODE_ENV: 'development' | 'production';
+      /**
+       * Floating Action Button text.
+       * @example "Got a question?"
+       */
+      FAB_TEXT?: string;
       /**
        * Chat window title.
        * @example "Send us a message..."
@@ -135,7 +135,7 @@ export namespace Yalcs {
        * Floating Action Button text when unread messages are available.
        * @example "Check your messages"
        */
-      UNREAD_MESSAGES_FAB_TEXT: string;
+      UNREAD_MESSAGES_FAB_TEXT?: string;
     }
 
     export interface Loader {

@@ -1,7 +1,3 @@
-import { config } from 'dotenv';
-config();
-import 'enve';
-
 import { verifySlackRequest } from 'lib/verify-slack-request';
 import { slackListener } from 'lib/slack-listener';
 import { sendMessage } from 'lib/send-message';
@@ -11,7 +7,6 @@ import { createHmac } from 'crypto';
 import { getThread } from 'lib/get-thread';
 import { Yalcs } from 'types/yalcs';
 import * as uuid from 'uuid/v4';
-import 'jest-extended';
 
 let nonce = 0;
 const timestamp = () => (Date.now() / 1000).toFixed(4) + nonce++;

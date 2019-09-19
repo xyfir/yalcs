@@ -1,4 +1,4 @@
-import * as storage from 'node-persist';
+import storage from 'node-persist';
 import { Yalcs } from 'types/yalcs';
 
 type ThreadListener = (thread: Yalcs.Thread) => void;

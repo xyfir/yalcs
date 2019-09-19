@@ -2,7 +2,7 @@ import { slackListener } from 'lib/slack-listener';
 import { ThreadStore } from 'lib/ThreadStore';
 import { createHmac } from 'crypto';
 import { Yalcs } from 'types/yalcs';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 test('slackListener() challenge', () => {
   const date = Math.floor(Date.now() / 1000);

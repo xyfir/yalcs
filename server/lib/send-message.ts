@@ -1,7 +1,7 @@
 import { ThreadStore } from 'lib/ThreadStore';
-import * as request from 'request-promise-native';
+import request from 'request-promise-native';
 import { Yalcs } from 'types/yalcs';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 export async function sendMessage({
   thread_ts,

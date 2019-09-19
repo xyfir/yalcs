@@ -1,4 +1,4 @@
-import * as timingSafeCompare from 'tsscmp';
+import timingSafeCompare from 'tsscmp';
 import { createHmac } from 'crypto';
 
 // Based on https://github.com/slackapi/node-slack-events-api/blob/master/src/http-handler.js

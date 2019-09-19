@@ -1,7 +1,7 @@
 import { ThreadStore } from 'lib/ThreadStore';
 import { getThread } from 'lib/get-thread';
 import { Yalcs } from 'types/yalcs';
-import * as uuid from 'uuid/v4';
+import uuid from 'uuid/v4';
 
 test('getThread()', async () => {
   const _thread: Yalcs.Thread = {

@@ -3,8 +3,8 @@ import { config } from 'dotenv';
 config();
 import 'enve';
 
-import * as bodyParser from 'body-parser';
-import * as Express from 'express';
+import bodyParser from 'body-parser';
+import Express from 'express';
 import { resolve } from 'path';
 import { router } from 'api/router';
 import { Yalcs } from 'types/yalcs';

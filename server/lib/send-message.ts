@@ -18,11 +18,19 @@ export async function sendMessage({
     }
     // Create new thread
     else {
+      // Get geolocation data from IP
+      let geoip = ip;
+      if (ip != '::ffff:127.0.0.1' && ip != '::1') {
+        const res = await request.get(`https://freegeoip.app/json/${ip}`);
+        geoip += ` — ${res.city}, ${res.region_name}, ${res.country_name}`;
+      }
+
+      // Create initial message to start thread
       const res = await request.post('https://slack.com/api/chat.postMessage', {
         auth: { bearer: process.enve.SLACK_BOT_TOKEN },
         json: {
           channel: process.enve.SLACK_CHANNEL,
-          text: ip
+          text: geoip
         }
       });
       thread = { thread_ts: res.message.ts, messages: [], key: uuid() };

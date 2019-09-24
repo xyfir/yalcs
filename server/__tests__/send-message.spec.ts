@@ -15,14 +15,14 @@ test('sendMessage()', async () => {
 
   // Create thread and send first message
   const newThread = await sendMessage({
-    text: Date.now().toString(),
+    text: 'text',
     ip: '::1'
   });
 
   // Validate new thread
-  expect(newThread.thread_ts).toMatch(/^\d+\.\d+$/);
-  expect(newThread.messages[0].text).toMatch(/^\d{13}$/);
-  expect(newThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
+  expect(newThread.thread_ts).toBe('1568858478.1201');
+  expect(newThread.messages[0].text).toBe('text');
+  expect(newThread.messages[0].ts).toBe('1568858478.1202');
 
   // Mock storage and request
   mockGetItem.mockResolvedValue({
@@ -47,7 +47,7 @@ test('sendMessage()', async () => {
   });
 
   // Validate updated thread
-  expect(updatedThread.thread_ts).toBe(newThread.thread_ts);
+  expect(updatedThread.thread_ts).toBe('1568858478.1201');
   expect(updatedThread.messages[0].text).toBe('text');
-  expect(updatedThread.messages[0].ts).toMatch(/^\d+\.\d+$/);
+  expect(updatedThread.messages[0].ts).toBe('1568858478.1202');
 });

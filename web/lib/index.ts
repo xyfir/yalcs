@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { render } from 'react-dom';
 import { Yalcs } from 'types/yalcs';
 import { App } from 'components/App';
+import React from 'react';
 import 'typeface-roboto';
 
 declare global {

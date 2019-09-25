@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { Yalcs } from 'types/yalcs';
 import { api } from 'lib/api';
+import React from 'react';
 import {
   createStyles,
   withStyles,

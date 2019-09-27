@@ -70,7 +70,11 @@ export function Chat() {
     const opt: Yalcs.GetThreadOptions = { thread_ts, key };
     api
       .get('/thread', { params: opt })
-      .then(res => setThread({ ...res.data, thread_ts, key }))
+      .then(res => {
+        const thread: Yalcs.Thread = res.data;
+        setMessages(thread.messages!);
+        setThread(thread);
+      })
       .catch(err => console.error('yalcs load thread error', err));
   }, []);
 

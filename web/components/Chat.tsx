@@ -3,8 +3,7 @@ import { api } from 'lib/api';
 import React from 'react';
 import {
   createStyles,
-  withStyles,
-  WithStyles,
+  makeStyles,
   IconButton,
   Typography,
   TextField,
@@ -12,7 +11,6 @@ import {
   Toolbar,
   AppBar,
   Paper,
-  Theme,
   Fab
 } from '@material-ui/core';
 import {
@@ -23,7 +21,14 @@ import {
   Send as SendIcon
 } from '@material-ui/icons';
 
-const styles = (theme: Theme) =>
+const {
+  UNREAD_MESSAGES_FAB_TEXT,
+  MESSAGE_PLACEHOLDER_TEXT,
+  TITLE_TEXT,
+  FAB_TEXT
+} = process.enve;
+
+const useStyles = makeStyles(theme =>
   createStyles({
     outgoingMessage: {
       backgroundColor: theme.palette.secondary.main,
@@ -101,247 +106,228 @@ const styles = (theme: Theme) =>
       margin: theme.spacing(2),
       right: process.enve.FAB_ON_RIGHT ? '0' : ''
     }
-  });
+  })
+);
 
-interface ChatState extends Yalcs.Thread {
-  messages: Yalcs.Message[];
-  polling: boolean;
-  alert: boolean;
-  show: boolean;
-  text: string;
-}
+export function Chat() {
+  const [messages, setMessages] = React.useState<Yalcs.Message[]>([]);
+  const [polling, setPolling] = React.useState(false);
+  const [thread, setThread] = React.useState<Yalcs.Thread>({});
+  const [alert, setAlert] = React.useState(false);
+  const [show, setShow] = React.useState(false);
+  const [text, setText] = React.useState('');
+  const classes = useStyles();
+  const anchor = React.useRef<HTMLDivElement>(null);
 
-type ChatProps = WithStyles<typeof styles>;
-
-class _Chat extends React.Component<ChatProps, ChatState> {
-  state: ChatState = {
-    messages: [],
-    polling: false,
-    alert: false,
-    show: false,
-    text: ''
-  };
-  anchor = React.createRef<HTMLDivElement>();
-
-  componentDidMount() {
-    // Load thread
-    const thread_ts: Yalcs.Thread['thread_ts'] =
-      localStorage.getItem('yalcs.thread_ts') || undefined;
-    const key: Yalcs.Thread['key'] =
-      localStorage.getItem('yalcs.key') || undefined;
-    if (!thread_ts || !key) return;
-    const opt: Yalcs.GetThreadOptions = { thread_ts, key };
-    api
-      .get('/thread', { params: opt })
-      .then(res => this.setState({ ...res.data, thread_ts, key }))
-      .catch(err => console.error('yalcs load thread error', err));
-  }
-
-  componentDidUpdate(prevProps: ChatProps, prevState: ChatState) {
-    const { thread_ts, messages, polling, show, key } = this.state;
-
-    // Update localStorage from state
-    if (thread_ts) {
-      localStorage.setItem('yalcs.thread_ts', thread_ts);
-      localStorage.setItem('yalcs.key', key!);
-    }
-
-    // Scroll to anchor element (bottom of message list)
-    if (show && messages.length) this.anchor.current!.scrollIntoView();
-
-    // Begin polling for new messages
-    if (thread_ts && !polling) this.poll();
-
-    // Notify parent window of new show state
-    if (prevState.show != show) {
-      const event: Yalcs.EventData = { yalcs: true, show };
-      window.parent.postMessage(event, '*');
-    }
-  }
-
-  onClickLink(link: string) {
+  function onClickLink(link: string) {
     const event: Yalcs.EventData = { yalcs: true, link };
     window.parent.postMessage(event, '*');
   }
 
-  onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  function onKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     // Send on Enter, allow multiple lines while holding Shift
     if (e.key != 'Enter' || e.shiftKey) return;
     e.preventDefault();
-    this.onSend();
+    onSend();
   }
 
-  onClose() {
-    this.setState({ show: false });
+  function onClose() {
+    setShow(false);
   }
 
-  onOpen() {
-    this.setState({ show: true, alert: false });
+  function onOpen() {
+    setAlert(false);
+    setShow(true);
   }
 
-  onSend() {
+  function onSend() {
     // Send message and push to state if successful
-    const { thread_ts, text, key } = this.state;
-    const opt: Yalcs.SendMessageOptions = { thread_ts, text, key };
+    const opt: Yalcs.SendMessageOptions = {
+      thread_ts: thread.thread_ts,
+      text,
+      key: thread.key
+    };
     api.post('/messages', opt).then(res => {
       const thread: Yalcs.Thread = res.data;
-      this.setState({ ...thread, messages: thread.messages!, text: '' });
+      setText('');
+      setThread(thread);
+      setMessages(thread.messages!);
     });
   }
 
-  poll() {
-    const { thread_ts, messages, key } = this.state;
-    this.setState({ polling: true });
+  function poll() {
+    setPolling(true);
 
     // Keep connection alive until a new message is received
     // Will automatically reconnect on component update if !polling
     const opt: Yalcs.GetMessageOptions = {
       message_ts: messages[messages.length - 1].ts,
-      thread_ts,
-      key
+      thread_ts: thread.thread_ts,
+      key: thread.key
     };
     api
       .get('/messages', { params: opt })
       .then(res => {
-        const { messages, show } = this.state;
-        this.setState({
-          messages: messages.concat(res.data),
-          polling: false,
-          // Show alert fab if chat window is closed
-          alert: !show && res.data.length
-        });
+        setMessages(messages.concat(res.data));
+        setPolling(false);
+        // Show alert fab if chat window is closed
+        setAlert(!show && res.data.length);
       })
       .catch(err => {
         console.error('yalcs polling error', err);
         // Prevent instantly sending thousands of requests
-        setTimeout(() => this.setState({ polling: false }), 60 * 1000);
+        setTimeout(() => setPolling(false), 60 * 1000);
       });
   }
 
-  render() {
-    const { messages, alert, show, text } = this.state;
-    const { classes } = this.props;
-    const {
-      UNREAD_MESSAGES_FAB_TEXT,
-      MESSAGE_PLACEHOLDER_TEXT,
-      TITLE_TEXT,
-      FAB_TEXT
-    } = process.enve;
-    return (
-      <React.Fragment>
-        {show ? (
-          <Paper elevation={1} className={classes.chat}>
-            <AppBar
-              position="static"
-              elevation={0}
-              classes={{ root: classes.appBar }}
-              square={false}
-            >
-              <Toolbar>
-                <Typography
-                  color="inherit"
-                  variant="h6"
-                  className={classes.title}
-                >
-                  {TITLE_TEXT}
-                </Typography>
-                <IconButton
-                  color="inherit"
-                  onClick={() => this.onClose()}
-                  aria-label="Close chat"
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
+  // Load thread on mount
+  React.useEffect(() => {
+    const thread_ts: Yalcs.Thread['thread_ts'] =
+      localStorage.getItem('yalcs.thread_ts') || undefined;
+    const key: Yalcs.Thread['key'] =
+      localStorage.getItem('yalcs.key') || undefined;
+    if (!thread_ts || !key) return;
 
-            {messages.length ? (
-              <div className={classes.messages}>
-                {messages.map(msg => (
-                  <Paper
-                    key={msg.ts}
-                    elevation={2}
-                    className={
-                      msg.outgoing
-                        ? classes.outgoingMessage
-                        : classes.incomingMessage
-                    }
-                  >
-                    <Typography color="inherit">{msg.text}</Typography>
-                  </Paper>
-                ))}
-                <div ref={this.anchor} />
-              </div>
-            ) : (
-              <div className={classes.noMessages}>
-                <ChatOutlinedIcon className={classes.chatOutline} />
-                <Typography className={classes.poweredBy}>
-                  Chat powered by{' '}
-                  <a
-                    onClick={() =>
-                      this.onClickLink('https://github.com/Xyfir/yalcs')
-                    }
-                    className={classes.link}
-                  >
-                    Yalcs
-                  </a>
-                </Typography>
-              </div>
-            )}
+    const opt: Yalcs.GetThreadOptions = { thread_ts, key };
+    api
+      .get('/thread', { params: opt })
+      .then(res => setThread({ ...res.data, thread_ts, key }))
+      .catch(err => console.error('yalcs load thread error', err));
+  }, []);
 
-            <Divider />
+  // Update localStorage from state
+  React.useEffect(() => {
+    if (!thread.thread_ts) return;
+    localStorage.setItem('yalcs.thread_ts', thread.thread_ts);
+    localStorage.setItem('yalcs.key', thread.key!);
+  }, [thread.thread_ts]);
 
-            <div className={classes.sendMessage}>
-              <TextField
-                id="message-text"
-                type="text"
-                value={text}
-                margin="normal"
-                rowsMax={2}
-                onChange={e => this.setState({ text: e.target.value })}
-                fullWidth
-                multiline
-                onKeyDown={e => this.onKeyDown(e)}
-                placeholder={MESSAGE_PLACEHOLDER_TEXT}
-                InputProps={{ classes: { inputMultiline: classes.textarea } }}
-              />
-              <IconButton
-                color="primary"
-                onClick={() => this.onSend()}
-                aria-label="Send message"
+  // Scroll to anchor element (bottom of message list)
+  React.useEffect(() => {
+    if (show && messages.length) anchor.current!.scrollIntoView();
+  }, [show, messages.length]);
+
+  // Begin polling for new messages
+  React.useEffect(() => {
+    if (thread.thread_ts && !polling) poll();
+  }, [thread.thread_ts, polling]);
+
+  // Notify parent window of new show state
+  React.useEffect(() => {
+    const event: Yalcs.EventData = { yalcs: true, show };
+    window.parent.postMessage(event, '*');
+  }, [show]);
+
+  return (
+    <React.Fragment>
+      {show ? (
+        <Paper elevation={1} className={classes.chat}>
+          <AppBar
+            position="static"
+            elevation={0}
+            classes={{ root: classes.appBar }}
+            square={false}
+          >
+            <Toolbar>
+              <Typography
+                color="inherit"
+                variant="h6"
+                className={classes.title}
               >
-                <SendIcon />
+                {TITLE_TEXT}
+              </Typography>
+              <IconButton
+                color="inherit"
+                onClick={onClose}
+                aria-label="Close chat"
+              >
+                <CloseIcon />
               </IconButton>
+            </Toolbar>
+          </AppBar>
+
+          {messages.length ? (
+            <div className={classes.messages}>
+              {messages.map(msg => (
+                <Paper
+                  key={msg.ts}
+                  elevation={2}
+                  className={
+                    msg.outgoing
+                      ? classes.outgoingMessage
+                      : classes.incomingMessage
+                  }
+                >
+                  <Typography color="inherit">{msg.text}</Typography>
+                </Paper>
+              ))}
+              <div ref={anchor} />
             </div>
-          </Paper>
-        ) : null}
+          ) : (
+            <div className={classes.noMessages}>
+              <ChatOutlinedIcon className={classes.chatOutline} />
+              <Typography className={classes.poweredBy}>
+                Chat powered by{' '}
+                <a
+                  onClick={() => onClickLink('https://github.com/xyfir/yalcs')}
+                  className={classes.link}
+                >
+                  Yalcs
+                </a>
+              </Typography>
+            </div>
+          )}
 
-        {alert ? (
-          <Fab
-            color="secondary"
-            onClick={() => this.onOpen()}
-            variant={UNREAD_MESSAGES_FAB_TEXT ? 'extended' : 'round'}
-            className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
-            aria-label={UNREAD_MESSAGES_FAB_TEXT}
-          >
-            <NotificationImportantIcon className={classes.fabIcon} />
-            {UNREAD_MESSAGES_FAB_TEXT}
-          </Fab>
-        ) : (
-          <Fab
-            color="secondary"
-            onClick={() => this.onOpen()}
-            variant={FAB_TEXT ? 'extended' : 'round'}
-            className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
-            aria-label={FAB_TEXT}
-          >
-            <ChatIcon className={classes.fabIcon} />
-            {FAB_TEXT}
-          </Fab>
-        )}
-      </React.Fragment>
-    );
-  }
+          <Divider />
+
+          <div className={classes.sendMessage}>
+            <TextField
+              id="message-text"
+              type="text"
+              value={text}
+              margin="normal"
+              rowsMax={2}
+              onChange={e => setText(e.target.value)}
+              fullWidth
+              multiline
+              onKeyDown={onKeyDown}
+              placeholder={MESSAGE_PLACEHOLDER_TEXT}
+              InputProps={{ classes: { inputMultiline: classes.textarea } }}
+            />
+            <IconButton
+              color="primary"
+              onClick={onSend}
+              aria-label="Send message"
+            >
+              <SendIcon />
+            </IconButton>
+          </div>
+        </Paper>
+      ) : null}
+
+      {alert ? (
+        <Fab
+          color="secondary"
+          onClick={onOpen}
+          variant={UNREAD_MESSAGES_FAB_TEXT ? 'extended' : 'round'}
+          className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
+          aria-label={UNREAD_MESSAGES_FAB_TEXT}
+        >
+          <NotificationImportantIcon className={classes.fabIcon} />
+          {UNREAD_MESSAGES_FAB_TEXT}
+        </Fab>
+      ) : (
+        <Fab
+          color="secondary"
+          onClick={onOpen}
+          variant={FAB_TEXT ? 'extended' : 'round'}
+          className={`${classes.fab} ${show ? classes.hiddenFab : ''}`}
+          aria-label={FAB_TEXT}
+        >
+          <ChatIcon className={classes.fabIcon} />
+          {FAB_TEXT}
+        </Fab>
+      )}
+    </React.Fragment>
+  );
 }
-
-export const Chat = withStyles(styles)(_Chat);

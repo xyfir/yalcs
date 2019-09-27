@@ -10,7 +10,6 @@ export function Chat() {
   const [thread, setThread] = React.useState<Yalcs.Thread>({});
   const [alert, setAlert] = React.useState(false);
   const [show, setShow] = React.useState(false);
-  const [text, setText] = React.useState('');
 
   function onClose() {
     setShow(false);
@@ -21,7 +20,7 @@ export function Chat() {
     setShow(true);
   }
 
-  function onSend() {
+  function onSend(text: string) {
     // Send message and push to state if successful
     const opt: Yalcs.SendMessageOptions = {
       thread_ts: thread.thread_ts,
@@ -32,7 +31,6 @@ export function Chat() {
       const thread: Yalcs.Thread = res.data;
       setMessages(thread.messages!);
       setThread(thread);
-      setText('');
     });
   }
 
@@ -97,13 +95,7 @@ export function Chat() {
   return (
     <React.Fragment>
       {show ? (
-        <ChatPopup
-          messages={messages}
-          onClose={onClose}
-          setText={setText}
-          onSend={onSend}
-          text={text}
-        />
+        <ChatPopup messages={messages} onClose={onClose} onSend={onSend} />
       ) : null}
       <ChatButton onOpen={onOpen} alert={alert} show={show} />
     </React.Fragment>

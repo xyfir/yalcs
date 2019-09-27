@@ -89,19 +89,12 @@ const useStyles = makeStyles(theme =>
 
 type ChatPopupProps = {
   messages: Yalcs.Message[];
-  setText: (text: string) => void;
   onClose: () => void;
-  onSend: () => void;
-  text: string;
+  onSend: (text: string) => void;
 };
 
-export function ChatPopup({
-  messages,
-  setText,
-  onClose,
-  onSend,
-  text
-}: ChatPopupProps) {
+export function ChatPopup({ messages, onClose, onSend }: ChatPopupProps) {
+  const [text, setText] = React.useState('');
   const classes = useStyles();
   const anchor = React.useRef<HTMLDivElement>(null);
 
@@ -114,7 +107,12 @@ export function ChatPopup({
     // Send on Enter, allow multiple lines while holding Shift
     if (e.key != 'Enter' || e.shiftKey) return;
     e.preventDefault();
-    onSend();
+    _onSend();
+  }
+
+  function _onSend() {
+    onSend(text);
+    setText('');
   }
 
   // Scroll to anchor element (bottom of message list)
@@ -186,7 +184,7 @@ export function ChatPopup({
           placeholder={MESSAGE_PLACEHOLDER_TEXT}
           InputProps={{ classes: { inputMultiline: classes.textarea } }}
         />
-        <IconButton color="primary" onClick={onSend} aria-label="Send message">
+        <IconButton color="primary" onClick={_onSend} aria-label="Send message">
           <SendIcon />
         </IconButton>
       </div>

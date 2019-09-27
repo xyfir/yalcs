@@ -29,7 +29,7 @@ As simple as Yalcs is, because it's entirely self-hosted, you'll still need to d
 ## Step 0: Clone the repo
 
 ```bash
-git clone https://github.com/Xyfir/yalcs.git
+git clone https://github.com/xyfir/yalcs.git
 cd yalcs
 ```
 
@@ -86,7 +86,7 @@ cp web/example.env web/.env
 
 ### Step 3b: Edit `.env` files
 
-Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/Xyfir/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
+Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/xyfir/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
 
 ## Step 4: Build from source
 

@@ -149,9 +149,9 @@ export function Chat() {
     };
     api.post('/messages', opt).then(res => {
       const thread: Yalcs.Thread = res.data;
-      setText('');
-      setThread(thread);
       setMessages(thread.messages!);
+      setThread(thread);
+      setText('');
     });
   }
 

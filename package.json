@@ -1,15 +1,15 @@
 {
   "name": "yalcs",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Yet Another Live Chat for Slack — Message your website's visitors through Slack for support or sales.",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "yalcs-loader": "^1.1.1",
-    "yalcs-server": "^1.1.1",
-    "yalcs-web": "^1.1.1"
+    "yalcs-loader": "^1.2.0",
+    "yalcs-server": "^1.2.0",
+    "yalcs-web": "^1.2.0"
   },
   "prettier": {
     "singleQuote": true
@@ -18,12 +18,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Xyfir/yalcs.git"
+    "url": "git+https://github.com/xyfir/yalcs.git"
   },
   "bugs": {
-    "url": "https://github.com/Xyfir/yalcs/issues"
+    "url": "https://github.com/xyfir/yalcs/issues"
   },
-  "homepage": "https://github.com/Xyfir/yalcs#readme",
+  "homepage": "https://github.com/xyfir/yalcs#readme",
   "keywords": [
     "live chat",
     "chat",

@@ -11,6 +11,7 @@ export async function slackListener(
       type: 'message' | string;
       text: string;
       ts: string;
+      bot_id?: string;
     };
     type: 'url_verification' | 'event_callback' | string;
   },
@@ -26,7 +27,8 @@ export async function slackListener(
   if (data.event.type != 'message') return;
   if (!data.event.thread_ts) return;
   if (data.event.subtype == 'bot_message') return;
-
+  if (data.event.bot_id) return;
+  
   // Load thread
   const thread = await ThreadStore.read(
     data.event.thread_ts,

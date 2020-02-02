@@ -21,7 +21,7 @@ const app = Express();
 if (process.enve.NODE_ENV == 'development') {
   // Needed to allow communication from webpack-dev-server host
   app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Origin', process.enve.YALCS_WEB_URL);
     res.header(
       'Access-Control-Allow-Methods',
       'GET, POST, OPTIONS, PUT, DELETE'

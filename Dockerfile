@@ -11,4 +11,4 @@ RUN mkdir -p loader/node_modules && chown $YALCS_USER:$YALCS_USER $YALCS_HOME/lo
 
 USER $YALCS_USER
 
-ENTRYPOINT "docker-entrypoint.sh"
+CMD [ "/bin/bash", "docker-entrypoint.sh" ]

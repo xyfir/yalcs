@@ -5,7 +5,7 @@ import {
   Chat as ChatIcon
 } from '@material-ui/icons';
 
-const { UNREAD_MESSAGES_FAB_TEXT, FAB_TEXT } = process.enve;
+const { UNREAD_MESSAGES_FAB_TEXT, FAB_TEXT, FAB_ICON_ONLY } = process.enve;
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme =>
       transform: 'translate(0, 150%)'
     },
     fabIcon: {
-      marginRight: theme.spacing()
+      marginRight: FAB_ICON_ONLY ? '0' : theme.spacing()
     },
     fab: {
       transition: '0.5s',
@@ -54,7 +54,7 @@ export function ChatButton({ onOpen, alert, show }: ChatButtonProps) {
       aria-label={FAB_TEXT}
     >
       <ChatIcon className={classes.fabIcon} />
-      {FAB_TEXT}
+      {FAB_ICON_ONLY ? '' : FAB_TEXT}
     </Fab>
   );
 }

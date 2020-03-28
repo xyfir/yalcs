@@ -2,12 +2,16 @@ version: '3.7'
 
 services:
   yalcs:
-    build: .
-    restart: always
-    user: "1000:1000"
+    build: 
+      context: .
+      target: builder
+    image: yalcs:builder      
+    container_name: yalcs_dev
     ports:
       - 2040:2040
       - 2041:2041
+    entrypoint:
+      - /home/node/docker-entrypoint.sh
     volumes:
       - .:/home/node
       - loader_deps:/home/node/loader/node_modules

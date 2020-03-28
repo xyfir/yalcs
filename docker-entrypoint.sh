@@ -1,10 +1,5 @@
-cd loader \
-    && yarn \
-    && yarn build \
-    && cd ../web \
-    && yarn \
-    && yarn build \
-    && cd ../server \
-    && yarn \
-    && yarn build \
-    && yarn start
+cd loader && yarn install && yarn build
+cd ../web && yarn install && yarn build
+cd ../server && yarn install && yarn build
+
+yarn start

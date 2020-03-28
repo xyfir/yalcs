@@ -1,0 +1,7 @@
+server/dist
+server/node_modules
+server/.node-persist
+web/dist
+web/node_modules
+loader/dist
+loader/node_modules

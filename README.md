@@ -6,8 +6,6 @@ Message your website's visitors through Slack for support or sales. 100% free an
 
 Yalcs displays a configurable floating action button over your page that when activated opens a chat window connecting your visitors with an agent responding from your specified Slack channel.
 
-Built and mantained by **[Ptorx](https://ptorx.com)** and other **[Xyfir](https://www.xyfir.com)** projects.
-
 ## Features
 
 - Communicate with visitors who are on your site or app through your Slack workspace
@@ -24,14 +22,12 @@ As simple as Yalcs is, because it's entirely self-hosted, you'll still need to d
 
 **Note #1:** If your system does not yet have Node installed, start with [nvm](https://github.com/creationix/nvm#install-script) (or [nvm for Windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows)).
 
-**Note #2:** You may alternatively download Yalcs through npm (see [here](http://npmjs.com/package/yalcs)), however this is not currently the recommended installation method. In the future we may offer a CLI tool available through npm to make configuring, running, and managing Yalcs instances easier.
-
-**Note #3:** You could alternatively use Yalcs through Docker.
+**Note #2:** You may alternatively use Yalcs through Docker, or you can download Yalcs through npm (see [here](http://npmjs.com/package/yalcs)), however this is not currently the recommended installation method. In the future we may offer a CLI tool available through npm to make configuring, running, and managing Yalcs instances easier.
 
 ## Step 0: Clone the repo
 
 ```bash
-git clone https://github.com/xhite/yalcs.git
+git clone https://github.com/xyfir/yalcs.git
 cd yalcs
 ```
 
@@ -39,21 +35,25 @@ From now on we'll assume commands are run from `yalcs/`.
 
 ## Step 1: Download npm dependencies
 
-### with Docker
+### With Docker
 
-Build image docker through docker-compose.yml :
+Build image docker through docker-compose.yml:
+
 ```bash
 docker-compose build yalcs
 ```
-or with docker engine, start building image for development environment :
+or with docker engine, start building image for development environment:
+
 ```bash
 docker build --target builder -t yalcs:dev .
 ```
 
-Using docker-compose is better solution because it creates docker volumes to store npm dependencies and get them during image building. 
-Due to volume store, dependencies wil not be fetched for each new container.
+Using docker-compose is a better solution because it creates docker volumes to store npm dependencies and gets them during image building.
 
-### without Docker
+Due to volume store, dependencies will not be fetched for each new container.
+
+### Without Docker
+
 Install npm depencies for each module:
 
 ```bash
@@ -101,36 +101,49 @@ cp server/example.env server/.env
 cp web/example.env web/.env
 ```
 
-A french example env file is available for web part of YALCS : 
+**Note:** A French example `.env` file is also available for yalcs/web:
+
 ```bash
 cp web/example-french.env web/.env
 ```
 
-**BE CAREFUL** : in a docker context, you have to remove `yalcs` from url in .env files. For example, in server/.env :
+**BE CAREFUL**: In a docker context, you have to remove `yalcs` from the url in `.env` files. For example, in `server/.env`:
 
-      YALCS_WEB_URL="https://example.com/yalcs" becomes YALCS_WEB_URL="https://example.com"
+```
+YALCS_WEB_URL="https://example.com/yalcs"
+```
+
+becomes
+
+```
+YALCS_WEB_URL="https://example.com"
+```
 
 ### Step 3b: Edit `.env` files
 
-Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/xhite/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
+Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/xyfir/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
 
 ## Step 4: Build from source
 
-### with Docker
+### With Docker
 
-- Building image build app from sources.
+- Building image builds app from sources.
 - Starting a new container from docker-compose builds app from sources also.
+
 ```bash
 docker-compose start yalcs
 ```
-or with docker engine, start building image for development environment :
+
+or with docker engine, start building image for development environment:
+
 ```bash
 docker run -n yalcs_dev -v [mount env files] -v [mount node_modules] -v [mount sources] yalcs:dev 
 ```
 
-**TODO** : Write how to update dependencies and rebuild within docker container
+<-- TODO: Write how to update dependencies and rebuild within docker container -->
 
-### without Docker
+### Without Docker
+
 ```bash
 cd loader
 npm run build
@@ -143,10 +156,12 @@ cd ../
 
 ## Step 5: Start the server
 
-### with Docker
-Server is started with docker container.
+### With Docker
 
-### without Docker
+The server is started with Docker container.
+
+### Without Docker
+
 Now you'll need to start the server and serve the built files. The simplest way to do this is:
 
 ```bash

@@ -140,7 +140,7 @@ or with docker engine, start building image for development environment:
 docker run -n yalcs_dev -v [mount env files] -v [mount node_modules] -v [mount sources] yalcs:dev 
 ```
 
-<-- TODO: Write how to update dependencies and rebuild within docker container -->
+_TODO: Explain how to update dependencies and rebuild within Docker container._
 
 ### Without Docker
 

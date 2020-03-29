@@ -1,4 +1,7 @@
 node_modules/
+.node-persist/
 coverage/
 dist/
 .env
+.config/
+.yarnrc

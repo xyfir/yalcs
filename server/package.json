@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "node-persist": "^3.0.5",
     "request-promise-native": "^1.0.7",
+    "request": "^2.88.2",
     "tsscmp": "^1.0.6",
     "uuid": "^3.3.3"
   },

@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  yalcs:
+    image: yalcs
+    container_name: yalcs_prod
+    ports:
+      - 2040:2040
+      - 2041:2041
+    volumes:
+      - ./server/.env:/home/node/server/.env
+      - ./web/.env:/home/node/web/.env

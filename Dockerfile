@@ -9,13 +9,13 @@ COPY server/package.json loader/yarn.lock ./server/
 
 RUN cd loader && yarn install \
  && cd ../web && yarn install \
- && cd ../server && yarn install 
+ && cd ../server && yarn install
 
 COPY . ./
 
 RUN cd loader && yarn build \
  && cd ../web && yarn build \
- && cd ../server && yarn build 
+ && cd ../server && yarn build
 
 # STEP 2 : intermediate image to remove devDependencies
 FROM builder as intermediate
@@ -37,4 +37,4 @@ WORKDIR /home/node/server
 
 EXPOSE 2040
 
-CMD npm run start
+CMD ["npm", "run", "start"]

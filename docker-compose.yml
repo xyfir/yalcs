@@ -10,13 +10,12 @@ services:
     ports:
       - 2040:2040
       - 2041:2041
-    entrypoint:
-      - /home/node/docker-entrypoint.sh
     volumes:
       - .:/home/node
       - loader_deps:/home/node/loader/node_modules
       - server_deps:/home/node/server/node_modules
       - web_deps:/home/node/web/node_modules
+    command: /home/node/docker-entrypoint.sh
 
 volumes:
   loader_deps:

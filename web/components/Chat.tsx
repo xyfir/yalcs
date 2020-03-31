@@ -4,12 +4,15 @@ import { Yalcs } from 'types/yalcs';
 import { api } from 'lib/api';
 import React from 'react';
 
+const { APP_CONTEXT } = process.enve;
+
 export function Chat() {
   const [messages, setMessages] = React.useState<Yalcs.Message[]>([]);
   const [polling, setPolling] = React.useState(false);
   const [thread, setThread] = React.useState<Yalcs.Thread>({});
   const [alert, setAlert] = React.useState(false);
   const [show, setShow] = React.useState(false);
+  const [context, setContext] = React.useState({});
 
   function onClose() {
     setShow(false);
@@ -20,11 +23,17 @@ export function Chat() {
     setShow(true);
   }
 
+  function postContext(event) {
+    const context: Yalcs.context = event.data;
+    setContext(context);
+  }
+
   function onSend(text: string) {
     // Send message and push to state if successful
     const opt: Yalcs.SendMessageOptions = {
       thread_ts: thread.thread_ts,
       text,
+      context,
       key: thread.key
     };
     api.post('/messages', opt).then(res => {
@@ -58,6 +67,14 @@ export function Chat() {
         setTimeout(() => setPolling(false), 60 * 1000);
       });
   }
+
+  // Load app context on mount from window.parent only if sets in env
+  React.useEffect(() => {
+    if(APP_CONTEXT) {
+      window.addEventListener('message', postContext, false);
+      window.parent.postMessage('get_context', '*');
+    }
+  }, []);
 
   // Load thread on mount
   React.useEffect(() => {
@@ -99,7 +116,7 @@ export function Chat() {
   return (
     <React.Fragment>
       {show ? (
-        <ChatPopup messages={messages} onClose={onClose} onSend={onSend} />
+        <ChatPopup context={context} messages={messages} onClose={onClose} onSend={onSend} />
       ) : null}
       <ChatButton onOpen={onOpen} alert={alert} show={show} />
     </React.Fragment>

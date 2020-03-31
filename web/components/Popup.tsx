@@ -16,6 +16,7 @@ import {
   Close as CloseIcon,
   Send as SendIcon
 } from '@material-ui/icons';
+import { Context } from 'components/Context';
 
 const { MESSAGE_PLACEHOLDER_TEXT, TITLE_TEXT } = process.enve;
 
@@ -88,12 +89,13 @@ const useStyles = makeStyles(theme =>
 );
 
 type ChatPopupProps = {
+  context: {};
   messages: Yalcs.Message[];
   onClose: () => void;
   onSend: (text: string) => void;
 };
 
-export function ChatPopup({ messages, onClose, onSend }: ChatPopupProps) {
+export function ChatPopup({context, messages, onClose, onSend }: ChatPopupProps) {
   const [text, setText] = React.useState('');
   const classes = useStyles();
   const anchor = React.useRef<HTMLDivElement>(null);
@@ -137,6 +139,8 @@ export function ChatPopup({ messages, onClose, onSend }: ChatPopupProps) {
           </IconButton>
         </Toolbar>
       </AppBar>
+
+      {context ? (<Context name={context.name} firstname={context.firstname} email={context.email} />) : '' }
 
       {messages.length ? (
         <div className={classes.messages}>

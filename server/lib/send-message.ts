@@ -6,6 +6,7 @@ import uuid from 'uuid/v4';
 export async function sendMessage({
   thread_ts,
   text,
+  context,
   key,
   ip
 }: Yalcs.SendMessageOptions): Promise<Yalcs.Thread> {
@@ -18,11 +19,26 @@ export async function sendMessage({
     }
     // Create new thread
     else {
-      // Get geolocation data from IP
+      let slack_title: string = "";
+
+      if(context && process.enve.APP_CONTEXT) {
+        slack_title = `${context.host}`;
+        slack_title += ` — ${context.firstname} ${context.name} - ${context.email} - login: ${context.login}`;
+      }
+
       let geoip = ip;
-      if (ip != '::ffff:127.0.0.1' && ip != '::1') {
-        const res = await request.get(`https://freegeoip.app/json/${ip}`);
-        geoip += ` — ${res.city}, ${res.region_name}, ${res.country_name}`;
+      if(!process.enve.NO_GEOIP) {
+        // Get geolocation data from IP
+        if (ip != '::ffff:127.0.0.1' && ip != '::1') {
+          const res = await request.get(`https://freegeoip.app/json/${ip}`);
+          geoip += ` — ${res.city}, ${res.region_name}, ${res.country_name}`;
+        }
+      }
+      if(!process.enve.APP_CONTEXT || !process.enve.NO_GEOIP) {
+        if(slack_title.length > 0) {
+          slack_title += ` — `;
+        }
+        slack_title += `${geoip}`;
       }
 
       // Create initial message to start thread
@@ -30,7 +46,7 @@ export async function sendMessage({
         auth: { bearer: process.enve.SLACK_BOT_TOKEN },
         json: {
           channel: process.enve.SLACK_CHANNEL,
-          text: geoip
+          text: slack_title
         }
       });
       thread = { thread_ts: res.message.ts, messages: [], key: uuid() };

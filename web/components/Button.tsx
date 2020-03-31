@@ -5,7 +5,7 @@ import {
   Chat as ChatIcon
 } from '@material-ui/icons';
 
-const { UNREAD_MESSAGES_FAB_TEXT, FAB_TEXT, FAB_ICON_ONLY } = process.enve;
+const { UNREAD_MESSAGES_FAB_TEXT, FAB_TEXT, FAB_ICON_ONLY, FAB_ON_RIGHT } = process.enve;
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme =>
       position: 'fixed',
       bottom: '0',
       margin: theme.spacing(2),
-      right: process.enve.FAB_ON_RIGHT ? '0' : ''
+      right: FAB_ON_RIGHT ? '0' : ''
     }
   })
 );

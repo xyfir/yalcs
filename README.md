@@ -72,14 +72,14 @@ cd ../ # back to yalcs/
 2. Login to the Slack workspace you wish to add Yalcs to.
 3. Set the app name to Yalcs or whatever you like and select your workspace.
 4. Once viewing your new Slack app, go to _Bot Users_ and click _Add a bot user_. To add a bot user, follow these instructions :
-* Go to "OAuth & Permissions" → "Bot Token Scopes" : add the following scopes 
-- incoming-webhook
-- channels:history
-- groups:history
-- groups:read
-- groups:write
-- chat:write
-- im:write
+* Go to "OAuth & Permissions" → "Bot Token Scopes", add the following scopes :
+  - incoming-webhook
+  - channels:history
+  - groups:history
+  - groups:read
+  - groups:write
+  - chat:write
+  - im:write
 * Go to "App home" : give a name to bot (Yalcs or whatever) and verify if "Message Tab" is on in "Show Tabs" section.
 6. Go to _OAuth & Permissions_.
 7. Click _Install App_ and _Authorize_ its installation to your workspace.

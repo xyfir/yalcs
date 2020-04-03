@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   yalcs:
-    image: tdncloud-yalcs
+    image: yalcs
     container_name: yalcs_prod
     ports:
       - 2040:2040

@@ -30,6 +30,7 @@ export namespace Yalcs {
     text: string;
     key?: Yalcs.Thread['key'];
     ip?: string;
+    context?: Yalcs.HostContext;
   }
 
   export interface GetMessageOptions {

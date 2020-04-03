@@ -80,7 +80,7 @@ cd ../ # back to yalcs/
   - groups:write
   - chat:write
   - im:write
-* Go to "App home" : give a name to bot (Yalcs or whatever) and verify if "Message Tab" is on in "Show Tabs" section.
+5. Go to "App home" : give a name to bot (Yalcs or whatever) and verify if "Message Tab" is on in "Show Tabs" section.
 6. Go to _OAuth & Permissions_.
 7. Click _Install App_ and _Authorize_ its installation to your workspace.
 8. Save your _Bot User OAuth Access Token_ somewhere for later use.

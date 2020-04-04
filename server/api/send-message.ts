@@ -6,7 +6,13 @@ export function api_sendMessages(
   res: Response,
   next: NextFunction
 ): void {
-  sendMessage({ ...req.body, ip: req.ip })
+  let ip: string;
+  if(process.enve.TRUST_PROXY && req.ips.length > 0) {
+    ip = req.ips[0];
+  } else {
+    ip = req.ip;
+  }
+  sendMessage({ ...req.body, ip })
     .then(data => res.status(200).json(data))
     .catch(next);
 }

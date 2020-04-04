@@ -22,7 +22,9 @@ As simple as Yalcs is, because it's entirely self-hosted, you'll still need to d
 
 **Note #1:** If your system does not yet have Node installed, start with [nvm](https://github.com/creationix/nvm#install-script) (or [nvm for Windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows)).
 
-**Note #2:** You may alternatively use Yalcs through Docker, or you can download Yalcs through npm (see [here](http://npmjs.com/package/yalcs)), however this is not currently the recommended installation method. In the future we may offer a CLI tool available through npm to make configuring, running, and managing Yalcs instances easier.
+**Note #2:** You may alternatively download Yalcs through npm (see [here](http://npmjs.com/package/yalcs)), however this is not currently the recommended installation method. In the future we may offer a CLI tool available through npm to make configuring, running, and managing Yalcs instances easier.
+
+**Note #3:** You could alternatively use Yalcs through Docker. But Yalcs in development does **not** seem **working well**. Full tests have not be done.
 
 ## Step 0: Clone the repo
 
@@ -71,8 +73,16 @@ cd ../ # back to yalcs/
 1. Go to the [Create a Slack App](https://api.slack.com/apps?new_app=1) form on the Slack API dashboard.
 2. Login to the Slack workspace you wish to add Yalcs to.
 3. Set the app name to Yalcs or whatever you like and select your workspace.
-4. Once viewing your new Slack app, go to _Bot Users_ and click _Add a bot user_.
-5. Set the name to Yalcs or whatever you'd like then enable its always online status and click _Add Bot User_.
+4. Once viewing your new Slack app, go to _Bot Users_ and click _Add a bot user_. To add a bot user, follow these instructions :
+* Go to "OAuth & Permissions" → "Bot Token Scopes", add the following scopes :
+  - incoming-webhook
+  - channels:history
+  - groups:history
+  - groups:read
+  - groups:write
+  - chat:write
+  - im:write
+5. Go to "App home" : give a name to bot (Yalcs or whatever) and verify if "Message Tab" is on in "Show Tabs" section.
 6. Go to _OAuth & Permissions_.
 7. Click _Install App_ and _Authorize_ its installation to your workspace.
 8. Save your _Bot User OAuth Access Token_ somewhere for later use.
@@ -107,6 +117,10 @@ cp web/example.env web/.env
 cp web/example-french.env web/.env
 ```
 
+### Step 3b: Edit `.env` files
+
+Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/xhite/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
+
 **BE CAREFUL**: In a docker context, you have to remove `yalcs` from the url in `.env` files. For example, in `server/.env`:
 
 ```
@@ -119,9 +133,23 @@ becomes
 YALCS_WEB_URL="https://example.com"
 ```
 
-### Step 3b: Edit `.env` files
+#### web/.env
 
-Edit the files `loader/.env`, `server/.env`, and `web/.env`. Update the config keys with your own values. You can find descriptions for each one under the `Yalcs` -> `Env` namespaces in the [type definitions](https://github.com/xyfir/yalcs/blob/master/types/yalcs.d.ts). Use the appropriate `interface` for each corresponding file.
+Only new env variables are described.
+
+- APP\_CONTEXT (boolean `true|false`) is not mandatory : if true, it says to Yalcs to ask context to loader. When loader gets messages `get_context`, it sends to web part of Yalcs the `yalcs_context` javascript variable. This context permits to set an explicit title in Slack.
+
+#### server/.env
+
+Only new env variables are described.
+
+- APP\_CONTEXT (boolean `true|false`) is not mandatory : same as above but now server set title in Slack from context received by web part of Yalcs. 
+
+- TRUST\_PROXY (boolean `true|false`) is not mandatory : if true, server get ip from X-FORWARDER-FOR header of request (request.ips). It's useful when Yalcs is behind a proxy (Nginx, ngrok) to get real IP of message sender.
+
+- NO\_GEOIP (boolean `true|false`) is not mandatory : it disable fetching localisation of IP and does not set IP in title of Slack.
+
+If APP\_CONTEXT is not to true or undefined, IP is set to title of Slack event if NO\_GEOIP is true.
 
 ## Step 4: Build from source
 
@@ -139,8 +167,6 @@ or with docker engine, start building image for development environment:
 ```bash
 docker run -n yalcs_dev -v [mount env files] -v [mount node_modules] -v [mount sources] yalcs:dev 
 ```
-
-_TODO: Explain how to update dependencies and rebuild within Docker container._
 
 ### Without Docker
 
@@ -203,3 +229,8 @@ If you'd like to help work on Yalcs, the tutorial above will suffice to get you 
 - Use [ngrok](https://ngrok.com) so that Slack can contact your local machine: `ngrok http 2040` where `2040` is the API server's port.
 - Use `http://localhost:2041/loader.html` to properly test the web app and loader. This assumes you're running the web client's dev server on port `2041`.
 - Check the `scripts` in each module's `package.json` for helpful scripts.
+
+## TODO
+
+- Full tests in development environment with Docker containers
+- Write in this README how to update dependencies and rebuild within docker container

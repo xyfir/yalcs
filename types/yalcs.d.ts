@@ -11,6 +11,14 @@ export namespace Yalcs {
     key?: string;
   }
 
+  export interface HostContext {
+    name?: string;
+    firstname?: string;
+    login?: string;
+    email?: string;
+    host?: string;
+  }
+
   export interface EventData {
     yalcs: true;
     show?: boolean;
@@ -22,6 +30,7 @@ export namespace Yalcs {
     text: string;
     key?: Yalcs.Thread['key'];
     ip?: string;
+    context?: Yalcs.HostContext;
   }
 
   export interface GetMessageOptions {
@@ -83,6 +92,21 @@ export namespace Yalcs {
        * @example "11b0904b7f4e261dfaca88de70a4935e"
        */
       SLACK_SIGNING_SECRET: string;
+
+      /**
+      * if true, deactivate geoip fetch to sets Slack discuss
+      **/
+      NO_GEOIP?: boolean;
+
+      /**
+      * true or false to await context data from app window.
+      **/
+      APP_CONTEXT?: boolean;
+      
+      /**
+      * true or false to set Express to get ips from X-FORWARDED-FOR header.
+      **/
+      TRUST_PROXY?: boolean;
     }
 
     export interface Web {
@@ -136,6 +160,12 @@ export namespace Yalcs {
        * @example "Check your messages"
        */
       UNREAD_MESSAGES_FAB_TEXT?: string;
+
+      /**
+      * true or false to await context data from app window.
+      **/
+      APP_CONTEXT?: boolean;
+
     }
 
     export interface Loader {

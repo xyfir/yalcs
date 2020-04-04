@@ -33,6 +33,11 @@ if (process.enve.NODE_ENV == 'development') {
     next();
   });
 }
+if(process.enve.TRUST_PROXY) {
+  app.set('trust proxy', true)
+} else {
+  app.set('trust proxy', false)
+}
 app.use(
   process.enve.STATIC_PATH,
   Express.static(resolve(process.enve.WEB_DIRECTORY, 'dist'))

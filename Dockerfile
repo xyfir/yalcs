@@ -31,6 +31,7 @@ RUN mkdir -p /home/node/{server,web}
 COPY --from=intermediate /home/node/server/package.json /home/node/server/yarn.lock /home/node/server/
 COPY --from=intermediate /home/node/server/dist /home/node/server/dist
 COPY --from=intermediate /home/node/server/node_modules /home/node/server/node_modules
+COPY --from=intermediate /home/node/server/.env /home/node/server/.env
 COPY --from=intermediate /home/node/web/dist    /home/node/web/dist
 
 WORKDIR /home/node/server

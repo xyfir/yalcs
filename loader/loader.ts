@@ -52,6 +52,11 @@ function onRouteChange(): void {
 }
 
 window.addEventListener('message', event => {
+  if(event.data == 'get_context') {
+    if(window.yalcs_context) {
+      event.source.postMessage(window.yalcs_context, '*');
+    }
+  }
   const { yalcs, show, link } = event.data as Yalcs.EventData;
   if (!yalcs || !iframe) return;
 
